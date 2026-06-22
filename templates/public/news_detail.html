@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<a href="/{{ lang }}/news" class="back-link">← Назад к новостям</a>
+
+<article>
+    <h1>{{ news_item.title }}</h1>
+
+    {% if news_item.published_at %}
+    <p>{{ news_item.published_at.strftime('%d.%m.%Y %H:%M') }}</p>
+    {% endif %}
+
+    {% if news_item.image_path %}
+    <img src="{{ news_item.image_path }}" alt="{{ news_item.title }}">
+    {% endif %}
+
+    {% if news_item.summary %}
+    <p>{{ news_item.summary }}</p>
+    {% endif %}
+
+    <div style="white-space: pre-wrap;">{{ news_item.content }}</div>
+</article>
+
+{% endblock %}

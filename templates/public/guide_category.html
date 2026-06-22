@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<a href="/{{ lang }}/guide" class="back-link">← Назад к путеводителю</a>
+
+<h1>{{ category.title }}</h1>
+
+<p class="page-intro">
+    {{ category.description }}
+</p>
+
+<div class="article-list">
+
+    {% if articles %}
+
+        {% for article in articles %}
+            <a class="article-card"
+               href="/{{ lang }}/guide/{{ category.slug }}/{{ article.slug }}">
+
+                <h2>{{ article.title }}</h2>
+                <p>{{ article.summary }}</p>
+
+            </a>
+        {% endfor %}
+
+    {% else %}
+
+        <div class="article-placeholder">
+            <h2>Статьи раздела</h2>
+            <p>Позже здесь будут инструкции, документы, ссылки и ответы на частые вопросы.</p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

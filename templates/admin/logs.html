@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Журнал действий</h1>
+
+{% if logs %}
+<table>
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Пользователь</th>
+            <th>Действие</th>
+            <th>Описание</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+            <td>{{ log.user.name or log.user.email }}</td>
+            <td>{{ log.action }}</td>
+            <td>{{ log.description }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Действий пока нет.</p>
+{% endif %}
+
+<p><a href="{{ url_for('admin_dashboard') }}">← К админ-панели</a></p>
+
+{% endblock %}

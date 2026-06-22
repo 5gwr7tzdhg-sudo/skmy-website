@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Админ-панель: статьи путеводителя</h1>
+
+<p><a href="{{ url_for('admin_guide.new_article') }}">Добавить статью</a></p>
+
+<p><a href="{{ url_for('admin_guide.categories') }}">Перейти к категориям</a></p>
+
+{% if articles %}
+<table>
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Краткое описание</th>
+            <th>Категория</th>
+            <th>Язык</th>
+            <th>Slug</th>
+            <th>Опубликована</th>
+            <th>Порядок</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for article in articles %}
+        <tr>
+            <td>{{ article.title }}</td>
+            <td>{{ article.summary or "—" }}</td>
+            <td>{{ article.category.title }}</td>
+            <td>{{ article.language }}</td>
+            <td>{{ article.slug }}</td>
+            <td>{{ "Да" if article.is_published else "Нет" }}</td>
+            <td>{{ article.sort_order }}</td>
+            <td>
+                <a href="{{ url_for('admin_guide.edit_article', article_id=article.id) }}">Редактировать</a>
+                <form method="post" action="{{ url_for('admin_guide.toggle_article_published', article_id=article.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit">{{ "Скрыть" if article.is_published else "Опубликовать" }}</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Статьи пока не добавлены.</p>
+{% endif %}
+
+{% endblock %}

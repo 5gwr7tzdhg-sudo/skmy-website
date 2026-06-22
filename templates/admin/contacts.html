@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Обращения</h1>
+
+{% if messages %}
+<table>
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Имя</th>
+            <th>Email</th>
+            <th>Тема</th>
+            <th>Язык</th>
+            <th>Статус</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for message in messages %}
+        <tr>
+            <td>{{ message.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+            <td>{{ message.name }}</td>
+            <td>{{ message.email }}</td>
+            <td><a href="{{ url_for('admin_contacts.message_detail', message_id=message.id) }}">{{ message.subject }}</a></td>
+            <td>{{ message.language }}</td>
+            <td>{{ message.status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Обращений пока нет.</p>
+{% endif %}
+
+<p><a href="{{ url_for('admin_dashboard') }}">← К админ-панели</a></p>
+
+{% endblock %}

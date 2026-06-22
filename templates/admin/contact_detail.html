@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{ message.subject }}</h1>
+
+<p><strong>Дата:</strong> {{ message.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+<p><strong>Имя:</strong> {{ message.name }}</p>
+<p><strong>Email:</strong> {{ message.email }}</p>
+<p><strong>Язык:</strong> {{ message.language }}</p>
+<p><strong>Статус:</strong> {{ message.status }}</p>
+
+<h2>Сообщение</h2>
+<div style="white-space: pre-wrap;">{{ message.message }}</div>
+
+{% if message.status != "read" %}
+<form method="post" action="{{ url_for('admin_contacts.mark_read', message_id=message.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit">Отметить как прочитанное</button>
+</form>
+{% endif %}
+
+<p><a href="{{ url_for('admin_contacts.messages') }}">← К обращениям</a></p>
+
+{% endblock %}

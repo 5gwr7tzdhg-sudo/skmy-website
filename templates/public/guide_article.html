@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<a href="/{{ lang }}/guide/{{ category.slug }}" class="back-link">← Назад в раздел {{ category.title }}</a>
+
+<article class="guide-article">
+
+    <h1>{{ article.title }}</h1>
+
+    <p class="page-intro">
+        {{ article.summary }}
+    </p>
+
+    <div class="article-content">
+        <p>{{ article_content }}</p>
+    </div>
+
+    {% if faq_items %}
+    <section class="article-faq" aria-labelledby="faq-title">
+        <h2 id="faq-title">Часто задаваемые вопросы</h2>
+        {% for item in faq_items %}
+        <div class="article-faq__item">
+            <h3>{{ item.question }}</h3>
+            <p>{{ item.answer }}</p>
+        </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+</article>
+
+{% if faq_schema %}
+<script type="application/ld+json">{{ faq_schema|safe }}</script>
+{% endif %}
+
+{% endblock %}

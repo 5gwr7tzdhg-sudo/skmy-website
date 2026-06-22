@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Админ-панель: новости</h1>
+
+<p><a href="{{ url_for('admin_news.new_news') }}">Добавить новость</a></p>
+
+{% if news_items %}
+<table>
+    <thead>
+        <tr>
+            <th>Заголовок</th>
+            <th>Язык</th>
+            <th>Slug</th>
+            <th>Дата публикации</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for news_item in news_items %}
+        <tr>
+            <td>{{ news_item.title }}</td>
+            <td>{{ news_item.language }}</td>
+            <td>{{ news_item.slug }}</td>
+            <td>{{ news_item.published_at.strftime('%d.%m.%Y %H:%M') if news_item.published_at else '—' }}</td>
+            <td>{{ "Опубликована" if news_item.is_published else "Скрыта" }}</td>
+            <td>
+                <a href="{{ url_for('admin_news.edit_news', news_id=news_item.id) }}">Редактировать</a>
+                <form method="post" action="{{ url_for('admin_news.toggle_published', news_id=news_item.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit">{{ "Скрыть" if news_item.is_published else "Опубликовать" }}</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Новостей пока нет.</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="home-hero">
+    <div class="home-hero__content">
+        <p class="home-eyebrow">Suomen Kuurojen Maahanmuuttajayhdistys ry</p>
+        <h1>SKMY</h1>
+        <p class="home-hero__lead">
+            Поддержка глухих иммигрантов в Финляндии: понятные инструкции,
+            важные контакты и помощь в повседневных вопросах.
+        </p>
+
+        <div class="home-hero__actions">
+            <a class="home-button home-button--primary" href="/{{ lang }}/guide">Открыть путеводитель</a>
+            <a class="home-button home-button--secondary" href="/{{ lang }}/contacts">Связаться</a>
+        </div>
+
+        <form class="home-search" method="get" action="{{ url_for('search.search', lang=lang) }}">
+            <label for="search-query">Поиск по путеводителю</label>
+            <div>
+                <input id="search-query" name="q" type="search" placeholder="Например, Kela">
+                <button type="submit">Найти</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section class="home-section home-section--soft">
+    <div class="home-section__heading home-section__heading--row">
+        <div>
+            <p class="home-eyebrow">Полезно начать здесь</p>
+            <h2>Популярные инструкции</h2>
+        </div>
+        <a class="home-text-link" href="/{{ lang }}/guide">Все инструкции →</a>
+    </div>
+
+    {% if popular_articles %}
+    <div class="home-popular-grid">
+        {% for article in popular_articles %}
+        <article class="home-news-card">
+            <p class="home-news-card__date">{{ article.category.title }}</p>
+            <h3>
+                <a href="/{{ lang }}/guide/{{ article.category.slug }}/{{ article.slug }}">
+                    {{ article.title }}
+                </a>
+            </h3>
+            <p>{{ article.summary }}</p>
+            <a class="home-text-link" href="/{{ lang }}/guide/{{ article.category.slug }}/{{ article.slug }}">Читать инструкцию →</a>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="home-empty">Инструкции скоро появятся.</p>
+    {% endif %}
+</section>
+
+<section class="home-section">
+    <div class="home-section__heading">
+        <p class="home-eyebrow">Быстрая помощь</p>
+        <h2>С чего начать?</h2>
+    </div>
+
+    <div class="quick-help-grid">
+        <a href="/{{ lang }}/guide/dvv/henkilotunnus" class="quick-help-card">
+            <i class="bi bi-person-vcard quick-action-icon" aria-hidden="true"></i>
+            <span>Мне нужен henkilötunnus</span>
+        </a>
+        <a href="/{{ lang }}/guide/kela/benefits" class="quick-help-card">
+            <i class="bi bi-wallet2 quick-action-icon" aria-hidden="true"></i>
+            <span>Мне нужна помощь Kela</span>
+        </a>
+        <a href="/{{ lang }}/guide/kela/interpreter" class="quick-help-card">
+            <i class="bi bi-chat-square-text quick-action-icon" aria-hidden="true"></i>
+            <span>Мне нужен сурдоперевод</span>
+        </a>
+        <a href="/{{ lang }}/guide/te" class="quick-help-card">
+            <i class="bi bi-briefcase quick-action-icon" aria-hidden="true"></i>
+            <span>Я ищу работу</span>
+        </a>
+        <a href="/{{ lang }}/guide/migri" class="quick-help-card">
+            <i class="bi bi-file-earmark-text quick-action-icon" aria-hidden="true"></i>
+            <span>У меня вопрос по Migri</span>
+        </a>
+        <a href="/{{ lang }}/guide/health" class="quick-help-card">
+            <i class="bi bi-hospital quick-action-icon" aria-hidden="true"></i>
+            <span>Мне нужна медицинская помощь</span>
+        </a>
+    </div>
+</section>
+
+<section class="home-section">
+    <div class="home-section__heading home-section__heading--row">
+        <div>
+            <p class="home-eyebrow">Практическая информация</p>
+            <h2>Путеводитель по Финляндии</h2>
+        </div>
+        <a class="home-text-link" href="/{{ lang }}/guide">Все разделы →</a>
+    </div>
+
+    {% if categories %}
+    <div class="home-guide-grid">
+        {% set category_icons = {
+            'dvv': 'bi-person-vcard',
+            'kela': 'bi-wallet2',
+            'te': 'bi-briefcase',
+            'migri': 'bi-file-earmark-text',
+            'health': 'bi-hospital',
+            'family': 'bi-people'
+        } %}
+        {% for category in categories %}
+        <a class="home-guide-card" href="/{{ lang }}/guide/{{ category.slug }}">
+            <div class="icon-row">
+                <i class="bi {{ category_icons.get(category.slug, 'bi-info-circle') }} guide-card-icon" aria-hidden="true"></i>
+                <div>
+                    <h3>{{ category.title }}</h3>
+                    <p>{{ category.description }}</p>
+                    <span>Открыть раздел →</span>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="home-empty">Разделы путеводителя скоро появятся.</p>
+    {% endif %}
+</section>
+
+<section class="home-section home-section--soft">
+    <div class="home-section__heading home-section__heading--row">
+        <div>
+            <p class="home-eyebrow">SKMY</p>
+            <h2>Последние новости</h2>
+        </div>
+        <a class="home-text-link" href="/{{ lang }}/news">Все новости →</a>
+    </div>
+
+    {% if latest_news %}
+    <div class="home-news-grid">
+        {% for news_item in latest_news %}
+        <article class="home-news-card">
+            {% if news_item.published_at %}
+            <p class="home-news-card__date">{{ news_item.published_at.strftime('%d.%m.%Y') }}</p>
+            {% endif %}
+            <h3><a href="/{{ lang }}/news/{{ news_item.slug }}">{{ news_item.title }}</a></h3>
+            <p>{{ news_item.summary }}</p>
+            <a class="home-text-link" href="/{{ lang }}/news/{{ news_item.slug }}">Читать →</a>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="home-empty">Новости скоро появятся.</p>
+    {% endif %}
+</section>
+
+<section class="home-social">
+    <div>
+        <p class="home-eyebrow">Остаёмся на связи</p>
+        <h2>SKMY в социальных сетях</h2>
+    </div>
+    <div class="home-social__links">
+        <a href="#">Instagram</a>
+        <a href="#">Telegram-канал</a>
+        <a href="#">Telegram-группа</a>
+    </div>
+</section>
+
+{% endblock %}

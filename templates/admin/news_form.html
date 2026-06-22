@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{% if news_item %}Редактирование новости{% else %}Новая новость{% endif %}</h1>
+
+{% if errors %}
+<ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <p>
+        <label for="language">Язык *</label><br>
+        <input id="language" name="language" value="{{ form_data.get('language', '') }}" required>
+    </p>
+
+    <p>
+        <label for="title">Заголовок *</label><br>
+        <input id="title" name="title" value="{{ form_data.get('title', '') }}" required>
+    </p>
+
+    <p>
+        <label for="slug">Slug *</label><br>
+        <input id="slug" name="slug" value="{{ form_data.get('slug', '') }}" required>
+    </p>
+
+    <p>
+        <label for="summary">Краткое описание</label><br>
+        <textarea id="summary" name="summary" rows="3">{{ form_data.get('summary', '') }}</textarea>
+    </p>
+
+    <p>
+        <label for="content">Текст новости</label><br>
+        <textarea id="content" name="content" rows="10">{{ form_data.get('content', '') }}</textarea>
+    </p>
+
+    <p>
+        <label for="image_path">Путь к изображению</label><br>
+        <input id="image_path" name="image_path" value="{{ form_data.get('image_path', '') }}">
+    </p>
+
+    <p>
+        <label for="published_at">Дата публикации</label><br>
+        <input id="published_at" name="published_at" type="datetime-local" value="{{ form_data.get('published_at', '') }}">
+    </p>
+
+    <p>
+        <label>
+            <input name="is_published" type="checkbox" {% if form_data.get('is_published') is not none %}checked{% endif %}>
+            Опубликована
+        </label>
+    </p>
+
+    <button type="submit">{% if news_item %}Сохранить изменения{% else %}Сохранить новость{% endif %}</button>
+</form>
+
+<p><a href="{{ url_for('admin_news.news_list') }}">← К списку новостей</a></p>
+
+{% endblock %}

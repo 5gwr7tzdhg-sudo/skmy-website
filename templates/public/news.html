@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Новости</h1>
+
+{% if news_items %}
+<div class="article-list">
+    {% for news_item in news_items %}
+    <article class="article-card">
+        <h2><a href="/{{ lang }}/news/{{ news_item.slug }}">{{ news_item.title }}</a></h2>
+        {% if news_item.published_at %}
+        <p>{{ news_item.published_at.strftime('%d.%m.%Y') }}</p>
+        {% endif %}
+        <p>{{ news_item.summary }}</p>
+    </article>
+    {% endfor %}
+</div>
+{% else %}
+<p>Новостей пока нет.</p>
+{% endif %}
+{% endblock %}

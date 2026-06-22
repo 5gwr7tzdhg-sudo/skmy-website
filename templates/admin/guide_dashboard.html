@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Админ-панель: путеводитель</h1>
+
+<ul>
+    <li><a href="{{ url_for('admin_guide.categories') }}">Категории путеводителя</a></li>
+    <li><a href="{{ url_for('admin_guide.articles') }}">Статьи путеводителя</a></li>
+</ul>
+
+<p><a href="{{ url_for('admin_dashboard') }}">← К админ-панели</a></p>
+
+{% endblock %}

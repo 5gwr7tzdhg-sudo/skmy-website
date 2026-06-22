@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Админ-панель</h1>
+
+<ul>
+    <li><a href="{{ url_for('admin_guide.dashboard') }}">Путеводитель</a></li>
+    <li><a href="{{ url_for('admin_news.news_list') }}">Новости</a></li>
+    <li><a href="{{ url_for('admin_contacts.messages') }}">Контакты</a></li>
+    <li>Настройки</li>
+    <li><a href="{{ url_for('admin_logs') }}">Журнал действий</a></li>
+</ul>
+
+<form method="post" action="{{ url_for('admin_auth.logout') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit">Выйти</button>
+</form>
+
+{% endblock %}

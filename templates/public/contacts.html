@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Контакты</h1>
+
+{% if success_message %}
+<p>{{ success_message }}</p>
+{% endif %}
+
+{% if errors %}
+<ul>
+    {% for error in errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="language" value="{{ lang }}">
+
+    <p>
+        <label for="name">Имя *</label><br>
+        <input id="name" name="name" value="{{ form_data.get('name', '') }}" required>
+    </p>
+
+    <p>
+        <label for="email">Email *</label><br>
+        <input id="email" name="email" type="email" value="{{ form_data.get('email', '') }}" required>
+    </p>
+
+    <p>
+        <label for="subject">Тема *</label><br>
+        <input id="subject" name="subject" value="{{ form_data.get('subject', '') }}" required>
+    </p>
+
+    <p>
+        <label for="message">Сообщение *</label><br>
+        <textarea id="message" name="message" rows="8" required>{{ form_data.get('message', '') }}</textarea>
+    </p>
+
+    <button type="submit">Отправить</button>
+</form>
+{% endblock %}
