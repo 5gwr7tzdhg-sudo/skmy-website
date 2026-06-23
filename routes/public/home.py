@@ -62,13 +62,13 @@ def localized_home_guide_content(lang):
 
 @home_bp.route("/")
 def index():
-    return redirect("/ru/")
+    return redirect("/fi/")
 
 
 @home_bp.route("/<lang>/")
 def home(lang):
     if lang not in ["fi", "ru", "en"]:
-        return redirect("/ru/")
+        return redirect("/fi/")
 
     categories = (
         GuideCategory.query
@@ -115,7 +115,7 @@ def home(lang):
         },
         "en": {
             "template": "public/home_localized.html",
-            "meta_title": "SKMY — support for Deaf immigrants in Finland",
+            "meta_title": "SKMY – Information and Support for Deaf Immigrants in Finland",
             "meta_description": "SKMY helps Deaf and sign-language immigrants navigate services, rights, and practical information in Finland.",
             "navigation_labels": {
                 "home": "Home", "about": "About us", "news": "News", "guide": "Guide",

@@ -3,10 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>{{ meta_title|default('SKMY — поддержка глухих иммигрантов в Финляндии') }}</title>
+
     <meta name="description" content="{{ meta_description|default('SKMY помогает глухим иммигрантам ориентироваться в Финляндии: услуги, права и практические инструкции.') }}">
+
     <meta property="og:title" content="{{ meta_title|default('SKMY — поддержка глухих иммигрантов в Финляндии') }}">
     <meta property="og:description" content="{{ meta_description|default('SKMY помогает глухим иммигрантам ориентироваться в Финляндии: услуги, права и практические инструкции.') }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ base_url }}{{ request.path }}">
+    <meta property="og:site_name" content="SKMY">
+
     <link rel="canonical" href="{{ base_url }}{{ request.path }}">
     {% if not request.path.startswith('/admin') %}
     <link rel="alternate" hreflang="fi" href="{{ base_url }}{{ request.path.replace('/' ~ lang, '/fi', 1) }}">
@@ -22,7 +29,10 @@
 <header class="header">
     <div class="header__inner">
     <div class="logo">
-        <a href="/{{ lang }}/">SKMY</a>
+        {# Stable asset path for the official logo. #}
+        <a href="/{{ lang }}/" class="logo-link" aria-label="SKMY etusivu">
+            <img src="{{ url_for('static', filename='images/skmy-logo.png') }}" alt="SKMY" class="site-logo">
+        </a>
     </div>
 
     <nav class="main-nav">
