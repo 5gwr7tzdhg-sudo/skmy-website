@@ -4,33 +4,47 @@
 <div class="admin-toolbar"><a class="admin-button" href="{{ url_for('admin_news.new_news') }}"><i class="bi bi-plus-lg"></i> Добавить новость</a></div>
 {% set language_labels = {'fi': '🇫🇮 FI', 'ru': '🇷🇺 RU', 'en': '🇬🇧 EN'} %}
 {% if news_groups %}
-<div class="admin-table-wrap"><table class="admin-table admin-news-table"><thead><tr><th>Материал</th><th>Дата публикации</th><th>Языковые версии</th></tr></thead><tbody>
+<div class="admin-news-groups">
 {% for group in news_groups %}
-<tr>
-    <td class="admin-table__title">{{ group.title }}<br><small class="admin-table__muted">{{ group.translation_key }}</small></td>
-    <td>{{ group.published_at.strftime('%d.%m.%Y %H:%M') if group.published_at else '—' }}</td>
-    <td>
-        <div class="admin-news-localizations">
+<details class="admin-news-group">
+    <summary class="admin-news-group__summary">
+        <span class="admin-news-group__icon" aria-hidden="true">📰</span>
+        <span class="admin-news-group__main">
+            <strong>{{ group.title }}</strong>
+            <span class="admin-news-group__date">{{ group.published_at.strftime('%d.%m.%Y %H:%M') if group.published_at else 'Дата публикации не задана' }}</span>
+            <span class="admin-news-group__languages" aria-label="Статусы языковых версий">
+            {% for language in news_languages %}{% set news_item = group["items"].get(language) %}<span title="{{ language_labels[language] }}: {{ 'опубликовано' if news_item and news_item.is_published else ('черновик' if news_item else 'отсутствует') }}">{{ language_labels[language].split(' ')[0] }} {{ '✅' if news_item and news_item.is_published else ('📝' if news_item else '❌') }}</span>{% endfor %}
+            </span>
+        </span>
+        <span class="admin-news-group__toggle" aria-hidden="true"><span class="admin-news-group__toggle-label">Развернуть</span> <i class="bi bi-chevron-down"></i></span>
+    </summary>
+    <div class="admin-news-group__body">
+        <small class="admin-table__muted">translation key: {{ group.translation_key }}</small>
         {% for language in news_languages %}
             {% set news_item = group["items"].get(language) %}
             <div class="admin-news-localization">
             {% if news_item %}
-                <span>{{ language_labels[language] }}</span>
+                <strong>{{ language_labels[language] }}</strong>
                 <span class="admin-badge {{ 'admin-badge--published' if news_item.is_published else 'admin-badge--hidden' }}">{{ '✅ published' if news_item.is_published else '📝 draft' }}</span>
                 <a class="admin-action-link" href="{{ url_for('admin_news.edit_news', news_id=news_item.id) }}">Редактировать</a>
                 <form class="admin-inline-form" method="post" action="{{ url_for('admin_news.toggle_published', news_id=news_item.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="admin-button--secondary" type="submit">{{ 'Скрыть' if news_item.is_published else 'Опубликовать' }}</button></form>
                 <a class="admin-button--danger" href="{{ url_for('admin_news.delete_news', news_id=news_item.id) }}">Удалить</a>
             {% else %}
-                <span>{{ language_labels[language] }}</span>
+                <strong>{{ language_labels[language] }}</strong>
                 <span class="admin-badge admin-badge--hidden">❌ missing</span>
                 <a class="admin-action-link" href="{{ url_for('admin_news.new_news', language=language, translation_key=group.translation_key) }}">Добавить перевод</a>
             {% endif %}
             </div>
         {% endfor %}
-        </div>
-    </td>
-</tr>
+    </div>
+</details>
 {% endfor %}
-</tbody></table></div>
+</div>
 {% else %}<p class="admin-empty">Новостей пока нет.</p>{% endif %}
+<script>
+document.querySelectorAll('.admin-news-group').forEach((group) => {
+    const label = group.querySelector('.admin-news-group__toggle-label');
+    group.addEventListener('toggle', () => { label.textContent = group.open ? 'Свернуть' : 'Развернуть'; });
+});
+</script>
 {% endblock %}
