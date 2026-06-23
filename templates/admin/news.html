@@ -1,50 +1,16 @@
 {% extends "admin/admin_base.html" %}
 {% block page_title %}Новости{% endblock %}
 {% block content %}
-<div class="admin-toolbar"><a class="admin-button" href="{{ url_for('admin_news.new_news') }}"><i class="bi bi-plus-lg"></i> Добавить новость</a></div>
-{% set language_labels = {'fi': '🇫🇮 FI', 'ru': '🇷🇺 RU', 'en': '🇬🇧 EN'} %}
-{% if news_groups %}
-<div class="admin-news-groups">
-{% for group in news_groups %}
-<details class="admin-news-group">
-    <summary class="admin-news-group__summary">
-        <span class="admin-news-group__icon" aria-hidden="true">📰</span>
-        <span class="admin-news-group__main">
-            <strong>{{ group.title }}</strong>
-            <span class="admin-news-group__date">{{ group.published_at.strftime('%d.%m.%Y %H:%M') if group.published_at else 'Дата публикации не задана' }}</span>
-            <span class="admin-news-group__languages" aria-label="Статусы языковых версий">
-            {% for language in news_languages %}{% set news_item = group["items"].get(language) %}<span title="{{ language_labels[language] }}: {{ 'опубликовано' if news_item and news_item.is_published else ('черновик' if news_item else 'отсутствует') }}">{{ language_labels[language].split(' ')[0] }} {{ '✅' if news_item and news_item.is_published else ('📝' if news_item else '❌') }}</span>{% endfor %}
-            </span>
-        </span>
-        <span class="admin-news-group__toggle" aria-hidden="true"><span class="admin-news-group__toggle-label">Развернуть</span> <i class="bi bi-chevron-down"></i></span>
+<div class="admin-toolbar"><a class="admin-button" href="{{ url_for('admin_news.new_news') }}"><i class="bi bi-plus-lg" aria-hidden="true"></i> Добавить новость</a></div>
+{% set language_labels = {'fi': 'Finnish', 'ru': 'Russian', 'en': 'English'} %}
+{% if news_groups %}<div class="admin-content-cards">
+{% for group in news_groups %}<details class="admin-content-card">
+    <summary class="admin-content-card__summary">
+        <span class="admin-content-card__icon"><i class="bi bi-newspaper" aria-hidden="true"></i></span>
+        <span class="admin-content-card__content"><strong class="admin-content-card__title">{{ group.title }}</strong><span class="admin-content-card__date"><i class="bi bi-calendar3" aria-hidden="true"></i> {{ group.published_at.strftime('%d.%m.%Y %H:%M') if group.published_at else 'Дата публикации не задана' }}</span><span class="admin-language-badges" aria-label="Языковые версии">{% for language in news_languages %}{% set news_item = group['items'].get(language) %}<span class="admin-language-badge {{ 'admin-language-badge--present' if news_item else 'admin-language-badge--missing' }}" title="{{ language_labels[language] }}">{{ language|upper }} <i class="bi {{ 'bi-check-circle-fill' if news_item and news_item.is_published else ('bi-pencil-fill' if news_item else 'bi-x-circle-fill') }}" aria-hidden="true"></i></span>{% endfor %}</span></span>
+        <span class="admin-content-card__toggle"><span class="admin-content-card__toggle-label">Развернуть</span><i class="bi bi-chevron-down" aria-hidden="true"></i></span>
     </summary>
-    <div class="admin-news-group__body">
-        <small class="admin-table__muted">translation key: {{ group.translation_key }}</small>
-        {% for language in news_languages %}
-            {% set news_item = group["items"].get(language) %}
-            <div class="admin-news-localization">
-            {% if news_item %}
-                <strong>{{ language_labels[language] }}</strong>
-                <span class="admin-badge {{ 'admin-badge--published' if news_item.is_published else 'admin-badge--hidden' }}">{{ '✅ published' if news_item.is_published else '📝 draft' }}</span>
-                <a class="admin-action-link" href="{{ url_for('admin_news.edit_news', news_id=news_item.id) }}">Редактировать</a>
-                <form class="admin-inline-form" method="post" action="{{ url_for('admin_news.toggle_published', news_id=news_item.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="admin-button--secondary" type="submit">{{ 'Скрыть' if news_item.is_published else 'Опубликовать' }}</button></form>
-                <a class="admin-button--danger" href="{{ url_for('admin_news.delete_news', news_id=news_item.id) }}">Удалить</a>
-            {% else %}
-                <strong>{{ language_labels[language] }}</strong>
-                <span class="admin-badge admin-badge--hidden">❌ missing</span>
-                <a class="admin-action-link" href="{{ url_for('admin_news.new_news', language=language, translation_key=group.translation_key) }}">Добавить перевод</a>
-            {% endif %}
-            </div>
-        {% endfor %}
-    </div>
-</details>
-{% endfor %}
-</div>
-{% else %}<p class="admin-empty">Новостей пока нет.</p>{% endif %}
-<script>
-document.querySelectorAll('.admin-news-group').forEach((group) => {
-    const label = group.querySelector('.admin-news-group__toggle-label');
-    group.addEventListener('toggle', () => { label.textContent = group.open ? 'Свернуть' : 'Развернуть'; });
-});
-</script>
+    <div class="admin-content-card__body"><small class="admin-table__muted">translation key: {{ group.translation_key }}</small>{% for language in news_languages %}{% set news_item = group['items'].get(language) %}<section class="admin-language-panel"><div class="admin-language-panel__heading"><span class="admin-language-badge">{{ language|upper }}</span><strong>{{ language_labels[language] }}</strong>{% if news_item %}<span class="admin-badge {{ 'admin-badge--published' if news_item.is_published else 'admin-badge--hidden' }}"><i class="bi {{ 'bi-check-circle-fill' if news_item.is_published else 'bi-pencil-fill' }}" aria-hidden="true"></i> {{ 'Опубликовано' if news_item.is_published else 'Черновик' }}</span>{% else %}<span class="admin-badge admin-badge--hidden"><i class="bi bi-x-circle-fill" aria-hidden="true"></i> Нет версии</span>{% endif %}</div><div class="admin-actions">{% if news_item %}<a class="admin-action-link" href="{{ url_for('admin_news.edit_news', news_id=news_item.id) }}">Редактировать</a><form class="admin-inline-form" method="post" action="{{ url_for('admin_news.toggle_published', news_id=news_item.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="admin-button--secondary" type="submit">{{ 'Скрыть' if news_item.is_published else 'Опубликовать' }}</button></form><a class="admin-button--danger" href="{{ url_for('admin_news.delete_news', news_id=news_item.id) }}">Удалить</a>{% else %}<a class="admin-action-link" href="{{ url_for('admin_news.new_news', language=language, translation_key=group.translation_key) }}">Добавить перевод</a>{% endif %}</div></section>{% endfor %}</div>
+</details>{% endfor %}</div>{% else %}<p class="admin-empty">Новостей пока нет.</p>{% endif %}
+<script>document.querySelectorAll('.admin-content-card').forEach((card) => { const label = card.querySelector('.admin-content-card__toggle-label'); card.addEventListener('toggle', () => { label.textContent = card.open ? 'Свернуть' : 'Развернуть'; }); });</script>
 {% endblock %}
