@@ -104,8 +104,8 @@ def home(lang):
     localized_page = {
         "fi": {
             "template": "public/home_localized.html",
-            "meta_title": "SKMY – Tietoa ja tukea kuuroille maahanmuuttajille Suomessa",
-            "meta_description": "SKMY auttaa kuuroja ja viittomakielisiä maahanmuuttajia löytämään palvelut, oikeudet ja käytännön ohjeet Suomessa.",
+            "meta_title": "SKMY – Tietoa, tulkkausta ja palveluita kuuroille maahanmuuttajille Suomessa",
+            "meta_description": "SKMY auttaa kuuroja ja viittomakielisiä maahanmuuttajia löytämään palvelut, oikeudet, tulkkauspalvelut ja käytännön ohjeet Suomessa.",
             "navigation_labels": {
                 "home": "Etusivu", "about": "Tietoa meistä", "news": "Uutiset",
                 "guide": "Opas", "interpreting": "Viittomakielen tulkkaus",
@@ -115,13 +115,17 @@ def home(lang):
         },
         "en": {
             "template": "public/home_localized.html",
-            "meta_title": "SKMY – Information and Support for Deaf Immigrants in Finland",
-            "meta_description": "SKMY helps Deaf and sign-language immigrants navigate services, rights, and practical information in Finland.",
+            "meta_title": "SKMY – Information, Interpreting and Services for Deaf Immigrants in Finland",
+            "meta_description": "SKMY helps Deaf and sign-language immigrants find services, rights, interpreting support and practical information in Finland.",
             "navigation_labels": {
                 "home": "Home", "about": "About us", "news": "News", "guide": "Guide",
                 "interpreting": "Sign language interpreting", "contacts": "Contact",
             },
             "footer_name": "Finnish Association of Deaf Immigrants",
+        },
+        "ru": {
+            "meta_title": "SKMY – Информация, сурдоперевод и услуги для глухих иммигрантов в Финляндии",
+            "meta_description": "SKMY помогает глухим и жестоязычным иммигрантам находить услуги, права, сурдоперевод и практическую информацию в Финляндии.",
         },
     }.get(lang, {})
 
