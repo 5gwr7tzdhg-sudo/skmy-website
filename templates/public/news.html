@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Новости</h1>
+<div class="public-page-heading reveal"><p class="home-eyebrow">SKMY</p><h1>Новости</h1></div>
 
 {% if news_items %}
 <div class="article-list">
     {% for news_item in news_items %}
-    <article class="article-card">
+    <article class="article-card reveal">
         <h2><a href="/{{ lang }}/news/{{ news_item.slug }}">{{ news_item.title }}</a></h2>
         {% if news_item.published_at %}
         <p>{{ news_item.published_at.strftime('%d.%m.%Y') }}</p>
@@ -16,6 +16,6 @@
     {% endfor %}
 </div>
 {% else %}
-<p>Новостей пока нет.</p>
+<p class="home-empty news-empty">Новости и объявления организации будут опубликованы здесь.</p>
 {% endif %}
 {% endblock %}

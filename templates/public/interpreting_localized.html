@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% if lang == 'fi' %}
+{% set t = {
+  'eyebrow': 'SAAVUTETTAVUUS', 'title': 'Viittomakielen tulkkaus', 'subtitle': 'Selkeää tietoa oikeudesta tulkkauspalveluun, tulkin tilaamisesta ja tärkeisiin tapaamisiin valmistautumisesta.',
+  'what': 'MITÄ TÄMÄ ON', 'intro_title': 'Tukea viestintään tärkeissä tilanteissa', 'intro_1': 'Tämä osio on kuuroille ja viittomakielisille ihmisille, jotka tarvitsevat apua asioidessaan viranomaisten, terveydenhuollon, työnantajien ja muiden palvelujen kanssa.', 'intro_2': 'Jos henkilölle on myönnetty oikeus tulkkauspalveluun, Kela yleensä järjestää ja maksaa palvelun. SKMY ei tee päätöksiä Kelan puolesta, mutta auttaa ymmärtämään ohjeita ja valmistautumaan seuraavaan vaiheeseen.',
+  'start': 'MISTÄ ALOITTAA', 'action_title': 'Valitse tarvitsemasi toimenpide', 'right_title': 'Onko sinulla jo oikeus palveluun?', 'right_text': 'Tilaa viittomakielen tulkki tapaamiseen Kelan virallisen palvelun kautta.', 'right_cta': 'Tilaa viittomakielen tulkki', 'apply_title': 'Eikö oikeutta ole vielä myönnetty?', 'apply_text': 'Avaa Kelan ohje, tutustu tarvittaviin asiakirjoihin ja hae oikeutta tulkkauspalveluun.', 'apply_cta': 'Hae oikeutta Kelasta', 'help_title': 'Tarvitsetko apua valinnassa?', 'help_text': 'Lue Kelan virallinen palvelukuvaus vaihe vaiheelta ja ota tarvittaessa yhteyttä SKMY:hyn.', 'help_cta': 'Avaa Kelan ohje',
+  'practical': 'KÄYTÄNNÖN APU', 'vatu_text': 'Jos asut Uudenmaan alueella ja haluat tilata viittomakielen tulkin, muuttaa tai peruuttaa tilauksen tai saada tietoa Kelan tulkkauspalvelusta, voit ottaa yhteyttä Vatu-keskukseen.', 'phone': 'Puhelin:', 'copy_number': 'Kopioi numero', 'vatu_cta': 'Avaa Vatu-keskuksen sivu', 'remote_cta': 'Avaa Kelan etäpalvelu',
+  'messages': 'VALMIIT VIESTIT', 'template_title': 'Valmistele tulkkauspyyntö', 'template_lead': 'Avaa kortti, täytä päivä, aika ja osoite ja kopioi sitten viesti.', 'copy_template': 'Kopioi viestipohja', 'open_template': 'Avaa viestipohja →',
+  'support': 'SKMY ON TUKENASI', 'support_title': 'Etkö tiedä, mistä aloittaa?', 'support_1': 'Etkö ymmärrä DVV:n, Migrin, Kelan tai muun organisaation kirjettä?', 'support_2': 'Etkö tiedä, miten viittomakielen tulkki tilataan?', 'support_3': 'Etkö ole varma, mitä tehdä seuraavaksi?', 'support_4': 'Kirjoita SKMY:lle.<br><br>Autamme sinua ymmärtämään tilanteen ja ohjeet sekä selvitämme mahdolliset seuraavat askeleet.', 'contact': 'Kirjoita SKMY:lle'
+} %}
+{% set cards = [
+  {'icon': 'building', 'title': 'DVV', 'description': 'Tulkin pyyntö DVV-käyntiä varten', 'body': 'Hei,\n\nTarvitsen viittomakielen tulkin DVV-käyntiä varten.\n\nPäivämäärä:\nKellonaika:\nOsoite:\nTapaamispaikka:\n(esim. pääsisäänkäynti / vastaanotto / odotustila / asiantuntijan huone / infopiste)\nTapaamisen tarkoitus:\n(tietojen rekisteröinti / osoitteenmuutos / asiakirjojen hakeminen / henkilöllisyyden todistaminen)\n\nYstävällisin terveisin,\nNimi', 'id': 'template-dvv'},
+  {'icon': 'hospital', 'title': 'Terveydenhuollon käynti', 'description': 'Tulkin pyyntö lääkärille tai terveyskeskukseen', 'body': 'Hei,\n\nTarvitsen viittomakielen tulkin lääkärikäyntiä varten.\n\nPäivämäärä:\nKellonaika:\nTerveyskeskuksen / sairaalan nimi:\nOsoite:\nTapaamispaikka:\n(esim. vastaanotto / pääsisäänkäynti / lääkärin huone / odotustila)\nTapaamisen tarkoitus:\n(lääkäri / hammaslääkäri / tutkimus / leikkaus / konsultaatio)\n\nYstävällisin terveisin,\nNimi', 'id': 'template-health'},
+  {'icon': 'passport', 'title': 'Migri', 'description': 'Tulkin pyyntö Migrin asiointia varten', 'body': 'Hei,\n\nTarvitsen viittomakielen tulkin Migri-käyntiä varten.\n\nPäivämäärä:\nKellonaika:\nMigrin toimipiste:\nOsoite:\nTapaamispaikka:\n(pääsisäänkäynti / odotusalue / virkailijan huone)\nTapaamisen tarkoitus:\n(hakemuksen jättäminen / luvan jatkaminen / päätöksen vastaanottaminen / neuvonta)\n\nYstävällisin terveisin,\nNimi', 'id': 'template-migri'},
+  {'icon': 'file-earmark-text', 'title': 'Kela', 'description': 'Tulkin pyyntö Kela-tapaamista varten', 'body': 'Hei,\n\nTarvitsen viittomakielen tulkin Kela-tapaamista varten.\n\nPäivämäärä:\nKellonaika:\nKelan toimipiste:\nOsoite:\nTapaamispaikka:\n(pääsisäänkäynti / odotustila / sähköisen jonon numero)\nTapaamisen tarkoitus:\n(etuudet / tulkkauspalvelu / sosiaalinen tuki / henkilökohtainen tapaaminen)\n\nYstävällisin terveisin,\nNimi', 'id': 'template-kela'},
+  {'icon': 'briefcase', 'title': 'TE-palvelut', 'description': 'Tulkin pyyntö TE-palveluihin', 'body': 'Hei,\n\nTarvitsen viittomakielen tulkin TE-palveluihin.\n\nPäivämäärä:\nKellonaika:\nOsoite:\nTapaamispaikka:\n(pääsisäänkäynti / odotusalue / asiantuntijan huone / infopiste)\nTapaamisen tarkoitus:\n(työnhakijaksi rekisteröityminen / työllistymissuunnitelma / koulutus / neuvonta)\n\nYstävällisin terveisin,\nNimi', 'id': 'template-te'},
+  {'icon': 'mortarboard', 'title': 'Koulu / opiskelu', 'description': 'Tulkin pyyntö kouluun tai opiskelua varten', 'body': 'Hei,\n\nTarvitsen viittomakielen tulkin koulu- tai oppilaitostapaamista varten.\n\nPäivämäärä:\nKellonaika:\nOsoite:\nTapaamispaikka:\n(pääsisäänkäynti / vastaanotto / opintotoimisto / opettajan huone / ohjaajan huone / odotustila)\nTapaamisen tarkoitus:\n(opiskelupaikan hakeminen / opintojen jatkaminen / koe / testaus / tapaaminen opettajan kanssa)\n\nYstävällisin terveisin,\nNimi', 'id': 'template-school'}
+] %}
+{% else %}
+{% set t = {
+  'eyebrow': 'ACCESSIBILITY', 'title': 'Sign language interpreting', 'subtitle': 'Clear information about the right to interpreting services, booking an interpreter, and preparing for important appointments.',
+  'what': 'WHAT IT IS', 'intro_title': 'Support for communication in important situations', 'intro_1': 'This section is for Deaf and sign-language users who need support when communicating with public authorities, healthcare providers, employers, and other services.', 'intro_2': 'When a person has been granted the right to interpreting services, Kela usually arranges and pays for them. SKMY does not make decisions on Kela’s behalf, but helps people understand instructions and prepare for the next step.',
+  'start': 'WHERE TO START', 'action_title': 'Choose the action you need', 'right_title': 'Do you already have the right to the service?', 'right_text': 'Book a sign language interpreter for your appointment through Kela’s official service.', 'right_cta': 'Book a sign language interpreter', 'apply_title': 'Has the right not yet been granted?', 'apply_text': 'Open Kela’s instructions, find out which documents are needed, and apply for the right to interpreting services.', 'apply_cta': 'Apply through Kela', 'help_title': 'Need help choosing?', 'help_text': 'Read Kela’s official description of the service step by step, then contact SKMY if needed.', 'help_cta': 'Open Kela’s instructions',
+  'practical': 'PRACTICAL HELP', 'vatu_text': 'If you live in the Uusimaa region and need to book, change, or cancel a sign language interpreter, or need information about Kela’s interpreting services, you can contact Vatu-keskus.', 'phone': 'Phone:', 'copy_number': 'Copy number', 'vatu_cta': 'Open the Vatu-keskus page', 'remote_cta': 'Open Kela remote service',
+  'messages': 'READY-TO-USE MESSAGES', 'template_title': 'Prepare your interpreter request', 'template_lead': 'Open a card, fill in the date, time, and address, then copy the message.', 'copy_template': 'Copy template', 'open_template': 'Open template →', 'language_note': 'The copied message is in Finnish because interpreter services in Finland process requests in Finnish.',
+  'support': 'SKMY IS HERE TO HELP', 'support_title': 'Not sure where to start?', 'support_1': 'Do you not understand a letter from DVV, Migri, Kela, or another organisation?', 'support_2': 'Do you not know how to book a sign language interpreter?', 'support_3': 'Are you unsure which steps to take next?', 'support_4': 'Write to SKMY.<br><br>We can help you understand the situation and instructions, and suggest possible next steps.', 'contact': 'Write to SKMY'
+} %}
+{% set cards = [
+  {'icon': 'building', 'title': 'DVV', 'description': 'Interpreter request for a DVV appointment', 'body': 'Hello,\n\nI need a sign language interpreter for an appointment at DVV.\n\nDate:\nTime:\nAddress:\nMeeting place:\n(main entrance / reception / waiting area / specialist’s office / information desk)\nPurpose of the appointment:\n(registering details / change of address / collecting documents / proving identity)\n\nKind regards,\nName', 'id': 'template-dvv'},
+  {'icon': 'hospital', 'title': 'Healthcare appointment', 'description': 'Interpreter request for a doctor or health centre', 'body': 'Hello,\n\nI need a sign language interpreter for a healthcare appointment.\n\nDate:\nTime:\nName of health centre / hospital:\nAddress:\nMeeting place:\n(for example, reception / main entrance / doctor’s office / waiting area)\nPurpose of the appointment:\n(doctor / dentist / examination / operation / consultation)\n\nKind regards,\nName', 'id': 'template-health'},
+  {'icon': 'passport', 'title': 'Migri', 'description': 'Interpreter request for Migri', 'body': 'Hello,\n\nI need a sign language interpreter for an appointment at Migri.\n\nDate:\nTime:\nMigri office:\nAddress:\nMeeting place:\n(main entrance / waiting area / official’s office)\nPurpose of the appointment:\n(submitting an application / extending a permit / receiving a decision / guidance)\n\nKind regards,\nName', 'id': 'template-migri'},
+  {'icon': 'file-earmark-text', 'title': 'Kela', 'description': 'Interpreter request for a Kela appointment', 'body': 'Hello,\n\nI need a sign language interpreter for an appointment at Kela.\n\nDate:\nTime:\nKela office:\nAddress:\nMeeting place:\n(main entrance / waiting area / electronic queue number)\nPurpose of the appointment:\n(benefits / interpreting services / social support / personal appointment)\n\nKind regards,\nName', 'id': 'template-kela'},
+  {'icon': 'briefcase', 'title': 'TE services', 'description': 'Interpreter request for TE services', 'body': 'Hello,\n\nI need a sign language interpreter for TE services.\n\nDate:\nTime:\nAddress:\nMeeting place:\n(main entrance / waiting area / specialist’s office / information desk)\nPurpose of the appointment:\n(registering as an unemployed jobseeker / employment plan / training / guidance)\n\nKind regards,\nName', 'id': 'template-te'},
+  {'icon': 'mortarboard', 'title': 'School / studies', 'description': 'Interpreter request for a school or study appointment', 'body': 'Hello,\n\nI need a sign language interpreter for an appointment at a school or educational institution.\n\nDate:\nTime:\nAddress:\nMeeting place:\n(main entrance / reception / study office / teacher’s office / guidance counsellor’s office / waiting area)\nPurpose of the appointment:\n(applying for a place of study / continuing studies / exam / test / meeting with a teacher)\n\nKind regards,\nName', 'id': 'template-school'}
+] %}
+{% endif %}
+
+{% block content %}
+<section class="public-page-heading public-page-heading--wide reveal"><p class="home-eyebrow">{{ t.eyebrow }}</p><h1>{{ t.title }}</h1><p>{{ t.subtitle }}</p></section>
+<section class="interpreting-intro reveal"><div><p class="home-eyebrow">{{ t.what }}</p><h2>{{ t.intro_title }}</h2></div><div><p>{{ t.intro_1 }}</p><p>{{ t.intro_2 }}</p></div></section>
+<section class="interpreting-actions reveal" aria-labelledby="interpreting-actions-title"><div class="home-section__heading"><p class="home-eyebrow">{{ t.start }}</p><h2 id="interpreting-actions-title">{{ t.action_title }}</h2></div><div class="interpreting-actions__grid"><article><span>01</span><h3>{{ t.right_title }}</h3><p>{{ t.right_text }}</p><a class="article-step-action" href="https://www.kela.fi/interpreter-service-for-the-disabled-book-an-interpreter" target="_blank" rel="noopener noreferrer">{{ t.right_cta }} <span aria-hidden="true">↗</span></a></article><article><span>02</span><h3>{{ t.apply_title }}</h3><p>{{ t.apply_text }}</p><a class="article-step-action" href="https://www.kela.fi/interpreter-service-for-the-disabled-apply-for-the-right" target="_blank" rel="noopener noreferrer">{{ t.apply_cta }} <span aria-hidden="true">↗</span></a></article><article><span>03</span><h3>{{ t.help_title }}</h3><p>{{ t.help_text }}</p><a class="article-step-action" href="https://www.kela.fi/interpreter-service-for-the-disabled" target="_blank" rel="noopener noreferrer">{{ t.help_cta }} <span aria-hidden="true">↗</span></a></article></div></section>
+<section class="interpreting-vatu reveal"><div><p class="home-eyebrow">{{ t.practical }}</p><h2>Vatu-keskus</h2><p>{{ t.vatu_text }}</p><p class="interpreting-vatu__phone"><span class="interpreting-vatu__badge"><i class="bi bi-geo-alt" aria-hidden="true"></i> Uusimaa</span><i class="bi bi-telephone" aria-hidden="true"></i> {{ t.phone }} <strong>+358 20 634 4810</strong></p></div><div class="interpreting-vatu__actions"><button class="home-button home-button--secondary" type="button" data-copy-value="+358 20 634 4810"><i class="bi bi-clipboard" aria-hidden="true"></i> {{ t.copy_number }}</button><a class="home-button home-button--primary" href="https://www.kela.fi/interpreter-service-for-the-disabled-contact-information" target="_blank" rel="noopener noreferrer"><i class="bi bi-globe2" aria-hidden="true"></i> {{ t.vatu_cta }} <span aria-hidden="true">↗</span></a><a class="home-button home-button--secondary" href="https://www.kela.fi/vammaisten-tulkkauspalvelu-etapalvelu" target="_blank" rel="noopener noreferrer"><i class="bi bi-laptop" aria-hidden="true"></i> {{ t.remote_cta }} <span aria-hidden="true">↗</span></a></div></section>
+<section class="interpreting-templates reveal" aria-labelledby="templates-title"><div class="home-section__heading"><p class="home-eyebrow">{{ t.messages }}</p><h2 id="templates-title">{{ t.template_title }}</h2><p class="home-section__lead">{{ t.template_lead }}</p>{% if t.language_note %}<p class="interpreting-templates__language-note">{{ t.language_note }}</p>{% endif %}</div><div class="interpreting-templates__grid">{% for card in cards %}<article class="interpreter-template-card"><button class="interpreter-template-card__front" type="button" data-template-toggle aria-expanded="false"><i class="bi bi-{{ card.icon }}" aria-hidden="true"></i><strong>{{ card.title }}</strong><span>{{ card.description }}</span><b>{{ t.open_template }}</b></button><div class="interpreter-template-card__back"><pre>{{ card.body }}</pre><button type="button" data-copy-template="{{ card.id }}">{{ t.copy_template }}</button></div></article>{% endfor %}</div></section>
+
+{# These hidden source messages intentionally remain in Finnish for copying. #}
+<template id="template-dvv">Hei,
+
+Tarvitsen viittomakielen tulkin DVV-käyntiä varten.
+
+Päivämäärä:
+Kellonaika:
+Osoite:
+Tapaamispaikka:
+(esim. pääsisäänkäynti / vastaanotto / odotustila / asiantuntijan huone / infopiste)
+Tapaamisen tarkoitus:
+(tietojen rekisteröinti / osoitteenmuutos / asiakirjojen hakeminen / henkilöllisyyden todistaminen)
+
+Ystävällisin terveisin,
+Nimi</template>
+<template id="template-health">Hei,
+
+Tarvitsen viittomakielen tulkin lääkärikäyntiä varten.
+
+Päivämäärä:
+Kellonaika:
+Terveyskeskuksen / sairaalan nimi:
+Osoite:
+Tapaamispaikka:
+(esim. vastaanotto / pääsisäänkäynti / lääkärin huone / odotustila)
+Tapaamisen tarkoitus:
+(lääkäri / hammaslääkäri / tutkimus / leikkaus / konsultaatio)
+
+Ystävällisin terveisin,
+Nimi</template>
+<template id="template-migri">Hei,
+
+Tarvitsen viittomakielen tulkin Migri-käyntiä varten.
+
+Päivämäärä:
+Kellonaika:
+Migrin toimipiste:
+Osoite:
+Tapaamispaikka:
+(pääsisäänkäynti / odotusalue / virkailijan huone)
+Tapaamisen tarkoitus:
+(hakemuksen jättäminen / luvan jatkaminen / päätöksen vastaanottaminen / neuvonta)
+
+Ystävällisin terveisin,
+Nimi</template>
+<template id="template-kela">Hei,
+
+Tarvitsen viittomakielen tulkin Kela-tapaamista varten.
+
+Päivämäärä:
+Kellonaika:
+Kelan toimipiste:
+Osoite:
+Tapaamispaikka:
+(pääsisäänkäynti / odotustila / sähköisen jonon numero)
+Tapaamisen tarkoitus:
+(etuudet / tulkkauspalvelu / sosiaalinen tuki / henkilökohtainen tapaaminen)
+
+Ystävällisin terveisin,
+Nimi</template>
+<template id="template-te">Hei,
+
+Tarvitsen viittomakielen tulkin TE-palveluihin.
+
+Päivämäärä:
+Kellonaika:
+Osoite:
+Tapaamispaikka:
+(pääsisäänkäynti / odotusalue / asiantuntijan huone / infopiste)
+Tapaamisen tarkoitus:
+(työnhakijaksi rekisteröityminen / työllistymissuunnitelma / koulutus / neuvonta)
+
+Ystävällisin terveisin,
+Nimi</template>
+<template id="template-school">Hei,
+
+Tarvitsen viittomakielen tulkin koulu- tai oppilaitostapaamista varten.
+
+Päivämäärä:
+Kellonaika:
+Osoite:
+Tapaamispaikka:
+(pääsisäänkäynti / vastaanotto / opintotoimisto / opettajan huone / ohjaajan huone / odotustila)
+Tapaamisen tarkoitus:
+(opiskelupaikan hakeminen / opintojen jatkaminen / koe / testaus / tapaaminen opettajan kanssa)
+
+Ystävällisin terveisin,
+Nimi</template>
+<section class="interpreting-support reveal"><div><p class="home-eyebrow">{{ t.support }}</p><h2>{{ t.support_title }}</h2><p class="interpreting-support__questions">{{ t.support_1 }}</p><p class="interpreting-support__questions">{{ t.support_2 }}</p><p class="interpreting-support__questions">{{ t.support_3 }}</p><p class="interpreting-support__highlight">{{ t.support_4|safe }}</p></div><div class="interpreting-support__actions"><a class="home-button home-button--primary" href="/{{ lang }}/contacts?topic=interpreting"><i class="bi bi-envelope" aria-hidden="true"></i> {{ t.contact }} <span aria-hidden="true">→</span></a></div></section>
+{% endblock %}

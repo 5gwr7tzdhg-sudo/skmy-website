@@ -17,36 +17,43 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
-<body>
+<body class="public-site">
 
 <header class="header">
+    <div class="header__inner">
     <div class="logo">
         <a href="/{{ lang }}/">SKMY</a>
     </div>
 
     <nav class="main-nav">
-        <a href="/{{ lang }}/">Главная</a>
-        <a href="/{{ lang }}/about">О нас</a>
-        <a href="/{{ lang }}/news">Новости</a>
-        <a href="/{{ lang }}/guide">Путеводитель</a>
-        <a href="/{{ lang }}/interpreting">Сурдоперевод</a>
-        <a href="/{{ lang }}/contacts">Контакты</a>
+        <a href="/{{ lang }}/">{{ navigation_labels.home if navigation_labels else 'Главная' }}</a>
+        <a href="/{{ lang }}/about">{{ navigation_labels.about if navigation_labels else 'О нас' }}</a>
+        <a href="/{{ lang }}/news">{{ navigation_labels.news if navigation_labels else 'Новости' }}</a>
+        <a href="/{{ lang }}/guide">{{ navigation_labels.guide if navigation_labels else 'Путеводитель' }}</a>
+        <a href="/{{ lang }}/interpreting">{{ navigation_labels.interpreting if navigation_labels else 'Сурдоперевод' }}</a>
+        <a href="/{{ lang }}/contacts">{{ navigation_labels.contacts if navigation_labels else 'Контакты' }}</a>
     </nav>
 
+    {% set lang_query = ('?' ~ request.query_string.decode('utf-8')) if request.query_string else '' %}
     <nav class="lang-nav">
-        <a href="/fi/">FI</a>
-        <a href="/ru/">RU</a>
-        <a href="/en/">EN</a>
+        <a href="{{ request.path.replace('/' ~ lang, '/fi', 1) }}{{ lang_query }}"{% if lang == 'fi' %} class="is-active" aria-current="page"{% endif %}>FI</a>
+        <span class="lang-nav__separator" aria-hidden="true">|</span>
+        <a href="{{ request.path.replace('/' ~ lang, '/ru', 1) }}{{ lang_query }}"{% if lang == 'ru' %} class="is-active" aria-current="page"{% endif %}>RU</a>
+        <span class="lang-nav__separator" aria-hidden="true">|</span>
+        <a href="{{ request.path.replace('/' ~ lang, '/en', 1) }}{{ lang_query }}"{% if lang == 'en' %} class="is-active" aria-current="page"{% endif %}>EN</a>
     </nav>
+    </div>
 </header>
 
-<main>
+<main class="public-main">
     {% block content %}{% endblock %}
 </main>
 
-<footer>
-    © SKMY
+<footer class="site-footer">
+    <div>© SKMY <span>{{ footer_name|default('Suomen Kuurojen Maahanmuuttajayhdistys ry') }}</span></div>
 </footer>
+
+<script src="{{ url_for('static', filename='js/public-ui.js') }}" defer></script>
 
 </body>
 </html>

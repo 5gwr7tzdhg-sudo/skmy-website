@@ -2,9 +2,9 @@
 
 {% block content %}
 
-<h1>Поиск по путеводителю</h1>
+<div class="public-page-heading reveal"><p class="home-eyebrow">SKMY GUIDE</p><h1>Поиск по путеводителю</h1></div>
 
-<form method="get" action="{{ url_for('search.search', lang=lang) }}">
+<form class="public-search reveal" method="get" action="{{ url_for('search.search', lang=lang) }}">
     <label for="search-query">Поисковый запрос</label><br>
     <input id="search-query" name="q" type="search" value="{{ query }}">
     <button type="submit">Найти</button>
@@ -17,7 +17,7 @@
 {% if articles %}
 <div class="article-list">
     {% for article in articles %}
-    <article class="article-card">
+    <article class="article-card reveal">
         <h2>
             <a href="/{{ lang }}/guide/{{ article.category.slug }}/{{ article.slug }}">
                 {{ article.title }}

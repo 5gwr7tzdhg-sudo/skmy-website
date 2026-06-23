@@ -1,25 +1,5 @@
-{% extends "base.html" %}
-
+{% extends "admin/admin_base.html" %}
+{% block page_title %}Обращение{% endblock %}
 {% block content %}
-
-<h1>{{ message.subject }}</h1>
-
-<p><strong>Дата:</strong> {{ message.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
-<p><strong>Имя:</strong> {{ message.name }}</p>
-<p><strong>Email:</strong> {{ message.email }}</p>
-<p><strong>Язык:</strong> {{ message.language }}</p>
-<p><strong>Статус:</strong> {{ message.status }}</p>
-
-<h2>Сообщение</h2>
-<div style="white-space: pre-wrap;">{{ message.message }}</div>
-
-{% if message.status != "read" %}
-<form method="post" action="{{ url_for('admin_contacts.mark_read', message_id=message.id) }}">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <button type="submit">Отметить как прочитанное</button>
-</form>
-{% endif %}
-
-<p><a href="{{ url_for('admin_contacts.messages') }}">← К обращениям</a></p>
-
+<div class="admin-detail-card"><dl class="admin-detail-list"><dt>Тема</dt><dd><strong>{{ message.subject }}</strong></dd><dt>Дата</dt><dd>{{ message.created_at.strftime('%d.%m.%Y %H:%M') }}</dd><dt>Имя</dt><dd>{{ message.name }}</dd><dt>Email</dt><dd>{{ message.email }}</dd><dt>Язык</dt><dd>{{ message.language }}</dd><dt>Статус</dt><dd><span class="admin-badge {{ 'admin-badge--new' if message.status == 'new' else 'admin-badge--read' }}">{{ message.status }}</span></dd></dl><h2>Сообщение</h2><div class="admin-message-body">{{ message.message }}</div>{% if message.status != "read" %}<form class="admin-form__footer" method="post" action="{{ url_for('admin_contacts.mark_read', message_id=message.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="admin-button" type="submit"><i class="bi bi-check2"></i> Отметить как прочитанное</button></form>{% endif %}<p><a class="admin-back-link" href="{{ url_for('admin_contacts.messages') }}">К обращениям</a></p></div>
 {% endblock %}

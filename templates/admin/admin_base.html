@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Админ-панель SKMY{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body class="admin-body">
+    <div class="admin-shell">
+        <aside class="admin-sidebar">
+            <a class="admin-brand" href="{{ url_for('admin_dashboard') }}">
+                <span class="admin-brand__mark">SKMY</span>
+                <span>Админ-панель</span>
+            </a>
+
+            <nav class="admin-nav" aria-label="Основная навигация">
+                <a class="{% if request.endpoint == 'admin_dashboard' %}is-active{% endif %}" href="{{ url_for('admin_dashboard') }}">
+                    <i class="bi bi-grid-1x2" aria-hidden="true"></i> Dashboard
+                </a>
+                <p class="admin-nav__label">Путеводитель</p>
+                <a class="{% if request.endpoint in ('admin_guide.dashboard', 'admin_guide.categories') %}is-active{% endif %}" href="{{ url_for('admin_guide.categories') }}">
+                    <i class="bi bi-collection" aria-hidden="true"></i> Категории
+                </a>
+                <a class="{% if request.endpoint == 'admin_guide.articles' %}is-active{% endif %}" href="{{ url_for('admin_guide.articles') }}">
+                    <i class="bi bi-file-earmark-text" aria-hidden="true"></i> Статьи
+                </a>
+                <a class="{% if request.endpoint == 'admin_news.news_list' %}is-active{% endif %}" href="{{ url_for('admin_news.news_list') }}">
+                    <i class="bi bi-newspaper" aria-hidden="true"></i> Новости
+                </a>
+                <a class="{% if request.endpoint in ('admin_contacts.messages', 'admin_contacts.message_detail') %}is-active{% endif %}" href="{{ url_for('admin_contacts.messages') }}">
+                    <i class="bi bi-envelope" aria-hidden="true"></i> Обращения
+                </a>
+                <a class="{% if request.endpoint == 'admin_logs' %}is-active{% endif %}" href="{{ url_for('admin_logs') }}">
+                    <i class="bi bi-clock-history" aria-hidden="true"></i> Журнал действий
+                </a>
+                <span class="admin-nav__disabled"><i class="bi bi-gear" aria-hidden="true"></i> Настройки</span>
+            </nav>
+
+            <div class="admin-sidebar__footer">
+                <a class="admin-site-link" href="/ru/" target="_blank" rel="noopener">
+                    <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Открыть сайт
+                </a>
+                <form method="post" action="{{ url_for('admin_auth.logout') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="admin-logout" type="submit"><i class="bi bi-box-arrow-right" aria-hidden="true"></i> Выйти</button>
+                </form>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div>
+                    <p class="admin-topbar__eyebrow">SKMY</p>
+                    <h1>{% block page_title %}Админ-панель{% endblock %}</h1>
+                </div>
+                <span class="admin-user"><i class="bi bi-person-circle" aria-hidden="true"></i> {{ current_user.name or current_user.email }}</span>
+            </header>
+
+            <section class="admin-content">
+                {% block content %}{% endblock %}
+            </section>
+        </main>
+    </div>
+</body>
+</html>

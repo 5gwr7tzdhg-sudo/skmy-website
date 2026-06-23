@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="public-page-heading reveal"><p class="home-eyebrow">SKMY:N OPAS</p><h1>Opas Suomeen</h1><p class="page-intro">Valitse aihe ja selvitä, mihin ottaa yhteyttä ja mitä tehdä seuraavaksi.</p></section>
+<form class="public-search reveal" method="get" action="{{ url_for('search.search', lang=lang) }}"><label for="search-query">Hae oppaasta</label><br><input id="search-query" name="q" type="search" placeholder="Esimerkiksi Kela"><button type="submit">Hae</button></form>
+<div class="guide-grid">{% for category in categories %}<a class="guide-card reveal {% if loop.index is odd %}reveal--from-left{% else %}reveal--from-right{% endif %}" href="/fi/guide/{{ category.slug }}"><h2>{{ category.title }}</h2><p>{{ category.description }}</p></a>{% endfor %}</div>
+{% endblock %}

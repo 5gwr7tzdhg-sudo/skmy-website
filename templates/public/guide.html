@@ -2,13 +2,13 @@
 
 {% block content %}
 
-<h1>Путеводитель по Финляндии</h1>
+<section class="public-page-heading reveal"><p class="home-eyebrow">SKMY GUIDE</p><h1>Путеводитель по Финляндии</h1>
 
 <p class="page-intro">
     Выберите раздел, чтобы понять, куда обращаться и какие шаги сделать.
-</p>
+</p></section>
 
-<form method="get" action="{{ url_for('search.search', lang=lang) }}">
+<form class="public-search reveal" method="get" action="{{ url_for('search.search', lang=lang) }}">
     <label for="search-query">Поиск по путеводителю</label><br>
     <input id="search-query" name="q" type="search" placeholder="Например, Kela">
     <button type="submit">Найти</button>
@@ -18,7 +18,7 @@
 
     {% for category in categories %}
 
-        <a class="guide-card"
+        <a class="guide-card reveal {% if loop.index is odd %}reveal--from-left{% else %}reveal--from-right{% endif %}"
            href="/{{ lang }}/guide/{{ category.slug }}">
 
             <h2>{{ category.title }}</h2>

@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="public-page-heading reveal"><p class="home-eyebrow">SKMY:N OPAS</p><h1>Haku oppaasta</h1></div>
+<form class="public-search reveal" method="get" action="{{ url_for('search.search', lang=lang) }}"><label for="search-query">Hakusana</label><br><input id="search-query" name="q" type="search" value="{{ query }}"><button type="submit">Hae</button></form>
+{% if message %}<p>{{ message }}</p>{% endif %}{% if articles %}<div class="article-list">{% for article in articles %}<article class="article-card reveal"><h2><a href="/fi/guide/{{ article.category.slug }}/{{ article.slug }}">{{ article.title }}</a></h2><p><strong>Aihe:</strong> {{ article.category.title }}</p><p>{{ article.summary }}</p></article>{% endfor %}</div>{% endif %}
+{% endblock %}

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Контакты</h1>
+<div class="public-page-heading reveal"><p class="home-eyebrow">СВЯЗЬ С SKMY</p><h1>Контакты</h1></div>
 
 {% if success_message %}
 <p>{{ success_message }}</p>
@@ -15,7 +15,7 @@
 </ul>
 {% endif %}
 
-<form method="post">
+<form class="reveal" method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <input type="hidden" name="language" value="{{ lang }}">
 

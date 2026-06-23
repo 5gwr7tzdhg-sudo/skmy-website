@@ -1,18 +1,17 @@
-{% extends "base.html" %}
+{% extends "admin/admin_base.html" %}
+{% block page_title %}{% if news_item %}Редактирование новости{% else %}Новая новость{% endif %}{% endblock %}
 
 {% block content %}
 
-<h1>{% if news_item %}Редактирование новости{% else %}Новая новость{% endif %}</h1>
-
 {% if errors %}
-<ul>
+<div class="admin-alert"><ul>
     {% for error in errors %}
     <li>{{ error }}</li>
     {% endfor %}
-</ul>
+</ul></div>
 {% endif %}
 
-<form method="post">
+<div class="admin-form-card"><form class="admin-form" method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <p>
@@ -57,9 +56,8 @@
         </label>
     </p>
 
-    <button type="submit">{% if news_item %}Сохранить изменения{% else %}Сохранить новость{% endif %}</button>
+    <div class="admin-form__footer"><button class="admin-button" type="submit">{% if news_item %}Сохранить изменения{% else %}Сохранить новость{% endif %}</button><a class="admin-back-link" href="{{ url_for('admin_news.news_list') }}">К списку новостей</a></div>
 </form>
-
-<p><a href="{{ url_for('admin_news.news_list') }}">← К списку новостей</a></p>
+</div>
 
 {% endblock %}

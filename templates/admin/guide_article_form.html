@@ -1,115 +1,39 @@
-{% extends "base.html" %}
-
+{% extends "admin/admin_base.html" %}
+{% block page_title %}{% if article %}Редактирование статьи{% else %}Новая статья{% endif %}{% endblock %}
 {% block content %}
-
-<h1>{% if article %}Редактирование статьи{% else %}Новая статья путеводителя{% endif %}</h1>
-
-{% if errors %}
-<ul>
-    {% for error in errors %}
-    <li>{{ error }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-<form method="post">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <p>
-        <label for="category_id">Категория *</label><br>
-        <select id="category_id" name="category_id" required>
-            <option value="">Выберите категорию</option>
-            {% for category in categories %}
-            <option value="{{ category.id }}" {% if form_data.get('category_id') == category.id|string %}selected{% endif %}>
-                {{ category.title }} ({{ category.language }})
-            </option>
-            {% endfor %}
-        </select>
-    </p>
-
-    <p>
-        <label for="language">Язык *</label><br>
-        <input id="language" name="language" value="{{ form_data.get('language', '') }}" required>
-    </p>
-
-    <p>
-        <label for="title">Название *</label><br>
-        <input id="title" name="title" value="{{ form_data.get('title', '') }}" required>
-    </p>
-
-    <p>
-        <label for="slug">Slug *</label><br>
-        <input id="slug" name="slug" value="{{ form_data.get('slug', '') }}" required>
-    </p>
-
-    <p>
-        <label for="summary">Краткое описание</label><br>
-        <textarea id="summary" name="summary" rows="3">{{ form_data.get('summary', '') }}</textarea>
-    </p>
-
-    <p>
-        <label for="content">Содержание</label><br>
-        <textarea id="content" name="content" rows="10">{{ form_data.get('content', '') }}</textarea>
-    </p>
-
-    <details class="article-content-help">
-        <summary>Показать пример структуры</summary>
-        <p>Рекомендуемая структура статьи:</p>
-        <pre>Краткое объяснение
-
-## Шаги
-
-1. ...
-2. ...
-3. ...
-
-## Документы
-
-- ...
-- ...
-
-## Официальные ссылки
-
-- ...
-
-## FAQ
-
-Вопрос: ...
-Ответ: ...
-
-Вопрос: ...
-Ответ: ...</pre>
-    </details>
-
-    <p>
-        <label for="keywords">Ключевые слова</label><br>
-        <input id="keywords" name="keywords" value="{{ form_data.get('keywords', '') }}">
-    </p>
-
-    <p>
-        <label for="official_links">Официальные ссылки</label><br>
-        <textarea id="official_links" name="official_links" rows="3">{{ form_data.get('official_links', '') }}</textarea>
-    </p>
-
-    <p>
-        <label for="video_url">Ссылка на видео</label><br>
-        <input id="video_url" name="video_url" type="url" value="{{ form_data.get('video_url', '') }}">
-    </p>
-
-    <p>
-        <label for="sort_order">Порядок сортировки</label><br>
-        <input id="sort_order" name="sort_order" type="number" value="{{ form_data.get('sort_order', '') }}">
-    </p>
-
-    <p>
-        <label>
-            <input name="is_published" type="checkbox" {% if form_data.get('is_published') is not none %}checked{% endif %}>
-            Опубликована
-        </label>
-    </p>
-
-    <button type="submit">{% if article %}Сохранить изменения{% else %}Сохранить статью{% endif %}</button>
-</form>
-
-<p><a href="{{ url_for('admin_guide.articles') }}">← К списку статей</a></p>
-
+{% if errors %}<div class="admin-alert"><ul>{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul></div>{% endif %}
+<div class="admin-form-card admin-form-card--wide"><form class="admin-form" method="post" id="article-editor-form">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="admin-form-grid">
+<div class="admin-field"><label for="category_id">Категория *</label><select id="category_id" name="category_id" required><option value="">Выберите категорию</option>{% for category in categories %}<option value="{{ category.id }}" {% if form_data.get('category_id') == category.id|string %}selected{% endif %}>{{ category.title }} ({{ category.language }})</option>{% endfor %}</select></div>
+<div class="admin-field"><label for="language">Язык *</label><input id="language" name="language" value="{{ form_data.get('language', '') }}" required></div>
+<div class="admin-field"><label for="title">Название *</label><input id="title" name="title" value="{{ form_data.get('title', '') }}" required></div>
+<div class="admin-field"><label for="slug">Slug *</label><input id="slug" name="slug" value="{{ form_data.get('slug', '') }}" required></div>
+<div class="admin-field admin-field--full"><label for="summary">Краткое описание</label><textarea id="summary" name="summary" rows="3">{{ form_data.get('summary', '') }}</textarea></div>
+<div class="admin-field admin-field--full"><div class="editor-field-heading"><label for="content">Содержание</label><button class="admin-button--secondary" type="button" id="insert-article-template"><i class="bi bi-file-earmark-plus"></i> Вставить шаблон статьи</button></div><textarea id="content" name="content" rows="16">{{ form_data.get('content', '') }}</textarea></div>
+<div class="admin-info-block admin-field--full"><i class="bi bi-paperclip"></i><div><strong>Вложения</strong><span>Будущая функция: PDF-инструкции, документы и изображения.</span></div></div>
+<div class="admin-field"><label for="keywords">Ключевые слова</label><input id="keywords" name="keywords" value="{{ form_data.get('keywords', '') }}"><small>Введите ключевые слова через запятую. Пример: henkilötunnus, dvv, registration finland</small></div>
+<div class="admin-field"><label for="video_url">Ссылка на видео</label><input id="video_url" name="video_url" type="url" value="{{ form_data.get('video_url', '') }}"></div>
+</div>
+<section class="editor-section"><div class="editor-section__heading"><div><h2>Официальные ссылки</h2><p>Добавьте название и URL; ссылки будут показаны посетителям списком.</p></div><button class="admin-button--secondary" type="button" id="add-official-link"><i class="bi bi-plus-lg"></i> Добавить ссылку</button></div><div id="official-links-editor"></div><textarea id="official_links" name="official_links" hidden>{{ form_data.get('official_links', '') }}</textarea></section>
+<section class="editor-section"><div class="editor-section__heading"><div><h2>SEO</h2><p>Значения вычисляются автоматически и не сохраняются отдельно.</p></div></div><div class="admin-form-grid"><div class="admin-field"><label for="seo-title">Meta Title</label><input id="seo-title" readonly></div><div class="admin-field"><label for="seo-description">Meta Description</label><textarea id="seo-description" rows="3" readonly></textarea></div></div></section>
+<div class="admin-form-grid"><div class="admin-field"><label for="sort_order">Порядок сортировки</label><input id="sort_order" name="sort_order" type="number" value="{{ form_data.get('sort_order', '') }}"></div><label class="admin-checkbox"><input name="is_published" type="checkbox" {% if form_data.get('is_published') is not none %}checked{% endif %}> Опубликована</label></div>
+<div class="admin-form__footer"><button class="admin-button" type="submit">{% if article %}Сохранить изменения{% else %}Сохранить статью{% endif %}</button><button class="admin-button--secondary" type="button" id="preview-article"><i class="bi bi-eye"></i> Предпросмотр</button><a class="admin-back-link" href="{{ url_for('admin_guide.articles') }}">К списку статей</a></div>
+</form></div>
+<script>
+(function () {
+    const content = document.getElementById("content");
+    const template = "Что это такое?\n\nКраткое объяснение.\n\nШаг 1\n\nОписание.\n\nШаг 2\n\nОписание.\n\nШаг 3\n\nОписание.\n\nНеобходимые документы\n\n* Документ 1\n* Документ 2\n\nОфициальные ссылки\n\n* Ссылка 1\n* Ссылка 2\n\n## FAQ\n\nВопрос: ...\nОтвет: ...\n\nВопрос: ...\nОтвет: ...";
+    document.getElementById("insert-article-template").addEventListener("click", function () { if (!content.value.trim()) content.value = template; });
+    const rows = document.getElementById("official-links-editor"), storage = document.getElementById("official_links");
+    function sync() { storage.value = Array.from(rows.querySelectorAll(".official-link-row")).map(function (row) { const title = row.querySelector("[data-title]").value.trim(), url = row.querySelector("[data-url]").value.trim(); return url ? title + "|" + url : ""; }).filter(Boolean).join("\n"); }
+    function add(title, url) { const row = document.createElement("div"); row.className = "official-link-row"; row.innerHTML = '<input data-title placeholder="Название ссылки"><input data-url type="url" placeholder="https://example.fi"><button class="admin-button--danger" type="button">Удалить</button>'; row.querySelector("[data-title]").value = title || ""; row.querySelector("[data-url]").value = url || ""; row.querySelectorAll("input").forEach(function (input) { input.addEventListener("input", sync); }); row.querySelector("button").addEventListener("click", function () { row.remove(); sync(); }); rows.appendChild(row); }
+    storage.value.split(/\n+/).filter(Boolean).forEach(function (line) { const divider = line.indexOf("|"); add(divider >= 0 ? line.slice(0, divider) : line, divider >= 0 ? line.slice(divider + 1) : ""); });
+    if (!rows.children.length) add("", "");
+    document.getElementById("add-official-link").addEventListener("click", function () { add("", ""); });
+    function updateSeo() { document.getElementById("seo-title").value = document.getElementById("title").value || "SKMY"; document.getElementById("seo-description").value = document.getElementById("summary").value || document.getElementById("title").value || ""; }
+    ["title", "summary"].forEach(function (id) { document.getElementById(id).addEventListener("input", updateSeo); }); updateSeo();
+    document.getElementById("preview-article").addEventListener("click", function () { sync(); const win = window.open("", "_blank"); if (!win) return; const safe = function (value) { const node = document.createElement("div"); node.textContent = value; return node.innerHTML; }; const faq = content.value.split(/^## FAQ\s*$/m); const links = storage.value.split(/\n+/).filter(Boolean).map(function (line) { const p = line.split("|"); return p.length > 1 ? '<li><a href="' + safe(p.slice(1).join("|")) + '">' + safe(p[0]) + '</a></li>' : ""; }).join(""); win.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Предпросмотр</title><style>body{max-width:820px;margin:40px auto;padding:0 20px;font:17px/1.6 Arial;color:#243746}h1,h2{color:#1f4f8f}.card{padding:28px;border:1px solid #dbe3ee;border-radius:16px}pre{white-space:pre-wrap;font:inherit}.faq{margin-top:25px;padding-top:20px;border-top:1px solid #dbe3ee}</style></head><body><article class="card"><h1>' + safe(document.getElementById("title").value) + '</h1><p>' + safe(document.getElementById("summary").value) + '</p><pre>' + safe(faq[0].trim()) + '</pre>' + (links ? '<section><h2>Официальные ссылки</h2><ul>' + links + '</ul></section>' : '') + (document.getElementById("video_url").value ? '<section><h2>Видео</h2><a href="' + safe(document.getElementById("video_url").value) + '">Открыть видео</a></section>' : '') + (faq[1] ? '<section class="faq"><h2>Часто задаваемые вопросы</h2><pre>' + safe(faq[1].trim()) + '</pre></section>' : '') + '</article></body></html>'); win.document.close(); });
+}());
+</script>
 {% endblock %}

@@ -1,14 +1,5 @@
-{% extends "base.html" %}
-
+{% extends "admin/admin_base.html" %}
+{% block page_title %}Путеводитель{% endblock %}
 {% block content %}
-
-<h1>Админ-панель: путеводитель</h1>
-
-<ul>
-    <li><a href="{{ url_for('admin_guide.categories') }}">Категории путеводителя</a></li>
-    <li><a href="{{ url_for('admin_guide.articles') }}">Статьи путеводителя</a></li>
-</ul>
-
-<p><a href="{{ url_for('admin_dashboard') }}">← К админ-панели</a></p>
-
+<div class="admin-toolbar"><div class="admin-toolbar__links"><a class="admin-button" href="{{ url_for('admin_guide.categories') }}"><i class="bi bi-collection"></i> Категории</a><a class="admin-button--secondary" href="{{ url_for('admin_guide.articles') }}"><i class="bi bi-file-earmark-text"></i> Статьи</a></div></div>
 {% endblock %}

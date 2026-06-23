@@ -2,20 +2,20 @@
 
 {% block content %}
 
-<a href="/{{ lang }}/guide" class="back-link">← Назад к путеводителю</a>
+<div class="public-page-heading reveal"><a href="/{{ lang }}/guide" class="back-link">← Назад к путеводителю</a>
 
 <h1>{{ category.title }}</h1>
 
 <p class="page-intro">
     {{ category.description }}
-</p>
+</p></div>
 
 <div class="article-list">
 
     {% if articles %}
 
         {% for article in articles %}
-            <a class="article-card"
+            <a class="article-card reveal"
                href="/{{ lang }}/guide/{{ category.slug }}/{{ article.slug }}">
 
                 <h2>{{ article.title }}</h2>

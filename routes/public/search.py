@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, render_template, request
 from sqlalchemy import or_
 
 from database.models import GuideArticle, GuideCategory
+from routes.public.fi import fi_context
 
 
 search_bp = Blueprint("search", __name__)
@@ -17,7 +18,7 @@ def search(lang):
     message = None
 
     if not query:
-        message = "Введите поисковый запрос"
+        message = "Kirjoita hakusana" if lang == "fi" else "Введите поисковый запрос"
     else:
         pattern = f"%{query}%"
         articles = (
@@ -39,8 +40,13 @@ def search(lang):
         )
 
         if not articles:
-            message = "Ничего не найдено"
+            message = "Hakutuloksia ei löytynyt" if lang == "fi" else "Ничего не найдено"
 
+    if lang == "fi":
+        return render_template(
+            "public/search_fi.html", lang=lang, query=query, articles=articles, message=message,
+            **fi_context("Haku oppaasta | SKMY", "Hae SKMY:n Suomen oppaasta tietoa palveluista ja oikeuksista."),
+        )
     return render_template(
         "public/search.html",
         lang=lang,

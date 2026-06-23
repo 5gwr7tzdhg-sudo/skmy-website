@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="public-page-heading reveal"><a href="/fi/guide" class="back-link">← Takaisin oppaaseen</a><h1>{{ category.title }}</h1><p class="page-intro">{{ category.description }}</p></div>
+<div class="article-list">{% if articles %}{% for article in articles %}<a class="article-card reveal" href="/fi/guide/{{ category.slug }}/{{ article.slug }}"><h2>{{ article.title }}</h2><p>{{ article.summary }}</p></a>{% endfor %}{% else %}<div class="article-placeholder"><h2>Aiheen artikkelit</h2><p>Ohjeita, asiakirjoja, linkkejä ja vastauksia usein kysyttyihin kysymyksiin julkaistaan täällä myöhemmin.</p></div>{% endif %}</div>
+{% endblock %}

@@ -1,6 +1,213 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Сурдоперевод</h1>
-<p>Информация о праве на сурдоперевод, заявке и заказе переводчика.</p>
+<section class="public-page-heading public-page-heading--wide reveal">
+    <p class="home-eyebrow">ДОСТУПНОСТЬ</p>
+    <h1>Сурдоперевод</h1>
+    <p>Понятная информация о праве на сурдоперевод, заказе переводчика и подготовке к важным встречам.</p>
+</section>
+
+<section class="interpreting-intro reveal">
+    <div><p class="home-eyebrow">ЧТО ЭТО ТАКОЕ</p><h2>Поддержка для общения в важных ситуациях</h2></div>
+    <div><p>Раздел предназначен для глухих и жестоязычных людей, которым требуется помощь в общении с государственными учреждениями, медицинскими организациями, работодателями и другими службами.</p><p>Если человеку предоставлено право на переводческие услуги, их обычно организует и оплачивает Kela. SKMY не принимает решения вместо Kela, но помогает понять инструкции и подготовиться к следующему шагу.</p></div>
+</section>
+
+<section class="interpreting-actions reveal" aria-labelledby="interpreting-actions-title">
+    <div class="home-section__heading"><p class="home-eyebrow">С ЧЕГО НАЧАТЬ</p><h2 id="interpreting-actions-title">Выберите нужное действие</h2></div>
+    <div class="interpreting-actions__grid">
+        <article><span>01</span><h3>Уже есть право на услуги?</h3><p>Закажите сурдопереводчика для встречи через официальный сервис Kela.</p><a class="article-step-action" href="https://www.kela.fi/interpreter-service-for-the-disabled-book-an-interpreter" target="_blank" rel="noopener noreferrer">Заказать сурдопереводчика <span aria-hidden="true">↗</span></a></article>
+        <article><span>02</span><h3>Право ещё не оформлено?</h3><p>Откройте инструкцию Kela, узнайте о документах и подайте заявление на переводческие услуги.</p><a class="article-step-action" href="https://www.kela.fi/interpreter-service-for-the-disabled-apply-for-the-right" target="_blank" rel="noopener noreferrer">Подать заявление в Kela <span aria-hidden="true">↗</span></a></article>
+        <article><span>03</span><h3>Нужна помощь с выбором?</h3><p>Прочитайте официальное описание услуги Kela простыми шагами, затем при необходимости обратитесь в SKMY.</p><a class="article-step-action" href="https://www.kela.fi/interpreter-service-for-the-disabled" target="_blank" rel="noopener noreferrer">Открыть инструкцию Kela <span aria-hidden="true">↗</span></a></article>
+    </div>
+</section>
+
+<section class="interpreting-vatu reveal">
+    <div><p class="home-eyebrow">ПРАКТИЧЕСКАЯ ПОМОЩЬ</p><h2>Vatu-keskus</h2><p>Если вы проживаете в регионе Uusimaa и вам нужно заказать сурдопереводчика, изменить или отменить заказ, а также получить информацию о переводческих услугах Kela, вы можете обратиться в Vatu-keskus.</p><p class="interpreting-vatu__phone"><span class="interpreting-vatu__badge"><i class="bi bi-geo-alt" aria-hidden="true"></i> Uusimaa</span><i class="bi bi-telephone" aria-hidden="true"></i> Телефон: <strong>+358 20 634 4810</strong></p></div>
+    <div class="interpreting-vatu__actions"><button class="home-button home-button--secondary" type="button" data-copy-value="+358 20 634 4810"><i class="bi bi-clipboard" aria-hidden="true"></i> Скопировать номер</button><a class="home-button home-button--primary" href="https://www.kela.fi/interpreter-service-for-the-disabled-contact-information" target="_blank" rel="noopener noreferrer"><i class="bi bi-globe2" aria-hidden="true"></i> Открыть страницу Vatu-keskus <span aria-hidden="true">↗</span></a><a class="home-button home-button--secondary" href="https://www.kela.fi/vammaisten-tulkkauspalvelu-etapalvelu" target="_blank" rel="noopener noreferrer"><i class="bi bi-laptop" aria-hidden="true"></i> Открыть дистанционный сервис Kela <span aria-hidden="true">↗</span></a></div>
+</section>
+
+<section class="interpreting-templates reveal" aria-labelledby="templates-title">
+    <div class="home-section__heading"><p class="home-eyebrow">ГОТОВЫЕ СООБЩЕНИЯ</p><h2 id="templates-title">Подготовьте запрос переводчика</h2><p class="home-section__lead">Нажмите на карточку, заполните дату, время и адрес, затем скопируйте текст.</p><p class="interpreting-templates__language-note">Шаблоны отображаются на русском языке для удобства чтения. При копировании автоматически используется финская версия текста.</p></div>
+    <div class="interpreting-templates__grid">
+        <article class="interpreter-template-card"><button class="interpreter-template-card__front" type="button" data-template-toggle aria-expanded="false"><i class="bi bi-building" aria-hidden="true"></i><strong>DVV</strong><span>Запрос переводчика для посещения DVV</span><b>Открыть шаблон →</b></button><div class="interpreter-template-card__back"><pre>Здравствуйте.
+
+Мне нужен сурдопереводчик для посещения DVV.
+
+Дата:
+Время:
+Адрес:
+Место встречи:
+(главный вход / регистратура / зона ожидания / кабинет специалиста / инфостойка)
+Цель встречи:
+(регистрация данных / смена адреса / получение документов / подтверждение личности)
+
+С уважением,
+Имя</pre><button type="button" data-copy-template="template-dvv">Скопировать шаблон</button></div></article>
+        <article class="interpreter-template-card"><button class="interpreter-template-card__front" type="button" data-template-toggle aria-expanded="false"><i class="bi bi-hospital" aria-hidden="true"></i><strong>Медицинский приём</strong><span>Запрос переводчика для врача или поликлиники</span><b>Открыть шаблон →</b></button><div class="interpreter-template-card__back"><pre>Здравствуйте.
+
+Мне нужен сурдопереводчик для медицинского приёма.
+
+Дата:
+Время:
+Название поликлиники / больницы:
+Адрес:
+Место встречи:
+(например, регистратура / главный вход / кабинет врача / зал ожидания)
+Цель встречи:
+(врач / стоматолог / обследование / операция / консультация)
+
+С уважением,
+Имя</pre><button type="button" data-copy-template="template-health">Скопировать шаблон</button></div></article>
+        <article class="interpreter-template-card"><button class="interpreter-template-card__front" type="button" data-template-toggle aria-expanded="false"><i class="bi bi-passport" aria-hidden="true"></i><strong>Migri</strong><span>Запрос переводчика для миграционной службы</span><b>Открыть шаблон →</b></button><div class="interpreter-template-card__back"><pre>Здравствуйте.
+
+Мне нужен сурдопереводчик для посещения Migri.
+
+Дата:
+Время:
+Офис Migri:
+Адрес:
+Место встречи:
+(главный вход / зона ожидания / кабинет сотрудника)
+Цель встречи:
+(подача заявления / продление разрешения / получение решения / консультация)
+
+С уважением,
+Имя</pre><button type="button" data-copy-template="template-migri">Скопировать шаблон</button></div></article>
+        <article class="interpreter-template-card"><button class="interpreter-template-card__front" type="button" data-template-toggle aria-expanded="false"><i class="bi bi-file-earmark-text" aria-hidden="true"></i><strong>Kela</strong><span>Запрос переводчика для встречи в Kela</span><b>Открыть шаблон →</b></button><div class="interpreter-template-card__back"><pre>Здравствуйте.
+
+Мне нужен сурдопереводчик для встречи в Kela.
+
+Дата:
+Время:
+Отделение Kela:
+Адрес:
+Место встречи:
+(главный вход / зал ожидания / номер электронной очереди)
+Цель встречи:
+(пособия / переводческие услуги / социальная поддержка / личный приём)
+
+С уважением,
+Имя</pre><button type="button" data-copy-template="template-kela">Скопировать шаблон</button></div></article>
+        <article class="interpreter-template-card"><button class="interpreter-template-card__front" type="button" data-template-toggle aria-expanded="false"><i class="bi bi-briefcase" aria-hidden="true"></i><strong>TE-palvelut</strong><span>Запрос переводчика для службы занятости</span><b>Открыть шаблон →</b></button><div class="interpreter-template-card__back"><pre>Здравствуйте.
+
+Мне нужен сурдопереводчик для посещения TE-palvelut.
+
+Дата:
+Время:
+Адрес:
+Место встречи:
+(главный вход / зона ожидания / кабинет специалиста / информационная стойка)
+Цель встречи:
+(регистрация безработного / план трудоустройства / обучение / консультация)
+
+С уважением,
+Имя</pre><button type="button" data-copy-template="template-te">Скопировать шаблон</button></div></article>
+        <article class="interpreter-template-card"><button class="interpreter-template-card__front" type="button" data-template-toggle aria-expanded="false"><i class="bi bi-mortarboard" aria-hidden="true"></i><strong>Школа / обучение</strong><span>Запрос переводчика для школы или учёбы</span><b>Открыть шаблон →</b></button><div class="interpreter-template-card__back"><pre>Здравствуйте.
+
+Мне нужен сурдопереводчик для встречи в школе или учебном заведении.
+
+Дата:
+Время:
+Адрес:
+Место встречи:
+(главный вход / приёмная / учебный офис / кабинет преподавателя / кабинет куратора / зона ожидания)
+Цель встречи:
+(поступление / продолжение обучения / экзамен / тестирование / встреча с преподавателем)
+
+С уважением,
+Имя</pre><button type="button" data-copy-template="template-school">Скопировать шаблон</button></div></article>
+    </div>
+</section>
+
+<template id="template-dvv">Hei,
+
+Tarvitsen viittomakielen tulkin DVV-käyntiä varten.
+
+Päivämäärä:
+Kellonaika:
+Osoite:
+Tapaamispaikka:
+(esim. pääsisäänkäynti / vastaanotto / odotustila / asiantuntijan huone / infopiste)
+Tapaamisen tarkoitus:
+(tietojen rekisteröinti / osoitteenmuutos / asiakirjojen hakeminen / henkilöllisyyden todistaminen)
+
+Ystävällisin terveisin,
+Nimi</template>
+<template id="template-health">Hei,
+
+Tarvitsen viittomakielen tulkin lääkärikäyntiä varten.
+
+Päivämäärä:
+Kellonaika:
+Terveyskeskuksen / sairaalan nimi:
+Osoite:
+Tapaamispaikka:
+(esim. vastaanotto / pääsisäänkäynti / lääkärin huone / odotustila)
+Tapaamisen tarkoitus:
+(lääkäri / hammaslääkäri / tutkimus / leikkaus / konsultaatio)
+
+Ystävällisin terveisin,
+Nimi</template>
+<template id="template-migri">Hei,
+
+Tarvitsen viittomakielen tulkin Migri-käyntiä varten.
+
+Päivämäärä:
+Kellonaika:
+Migrin toimipiste:
+Osoite:
+Tapaamispaikka:
+(pääsisäänkäynti / odotusalue / virkailijan huone)
+Tapaamisen tarkoitus:
+(hakemuksen jättäminen / luvan jatkaminen / päätöksen vastaanottaminen / neuvonta)
+
+Ystävällisin terveisin,
+Nimi</template>
+<template id="template-kela">Hei,
+
+Tarvitsen viittomakielen tulkin Kela-tapaamista varten.
+
+Päivämäärä:
+Kellonaika:
+Kelan toimipiste:
+Osoite:
+Tapaamispaikka:
+(pääsisäänkäynti / odotustila / sähköisen jonon numero)
+Tapaamisen tarkoitus:
+(etuudet / tulkkauspalvelu / sosiaalinen tuki / henkilökohtainen tapaaminen)
+
+Ystävällisin terveisin,
+Nimi</template>
+<template id="template-te">Hei,
+
+Tarvitsen viittomakielen tulkin TE-palveluihin.
+
+Päivämäärä:
+Kellonaika:
+Osoite:
+Tapaamispaikka:
+(pääsisäänkäynti / odotusalue / asiantuntijan huone / infopiste)
+Tapaamisen tarkoitus:
+(työnhakijaksi rekisteröityminen / työllistymissuunnitelma / koulutus / neuvonta)
+
+Ystävällisin terveisin,
+Nimi</template>
+<template id="template-school">Hei,
+
+Tarvitsen viittomakielen tulkin koulu- tai oppilaitostapaamista varten.
+
+Päivämäärä:
+Kellonaika:
+Osoite:
+Tapaamispaikka:
+(pääsisäänkäynti / vastaanotto / opintotoimisto / opettajan huone / ohjaajan huone / odotustila)
+Tapaamisen tarkoitus:
+(opiskelupaikan hakeminen / opintojen jatkaminen / koe / testaus / tapaaminen opettajan kanssa)
+
+Ystävällisin terveisin,
+Nimi</template>
+<section class="interpreting-support reveal">
+    <div><p class="home-eyebrow">SKMY РЯДОМ</p><h2>Не знаете, с чего начать?</h2><p class="interpreting-support__questions">Не понимаете письмо от DVV, Migri, Kela или другой организации?</p><p class="interpreting-support__questions">Не знаете, как заказать сурдопереводчика?</p><p class="interpreting-support__questions">Не уверены, какие действия нужно предпринять дальше?</p><p class="interpreting-support__highlight">Напишите в SKMY.<br><br>Мы поможем разобраться в ситуации, понять инструкции и подскажем возможные дальнейшие шаги.</p></div>
+    <div class="interpreting-support__actions"><a class="home-button home-button--primary" href="/{{ lang }}/contacts?topic=interpreting"><i class="bi bi-envelope" aria-hidden="true"></i> Написать в SKMY <span aria-hidden="true">→</span></a></div>
+</section>
 {% endblock %}

@@ -1,20 +1,42 @@
-{% extends "base.html" %}
-
+{% extends "admin/admin_base.html" %}
+{% block page_title %}Dashboard{% endblock %}
 {% block content %}
+<div class="admin-stats">
+    <div class="admin-stat-card"><span class="admin-stat-card__icon"><i class="bi bi-collection"></i></span><span class="admin-stat-card__value">{{ dashboard_stats.categories }}</span><span class="admin-stat-card__label">Категорий</span></div>
+    <div class="admin-stat-card"><span class="admin-stat-card__icon"><i class="bi bi-file-earmark-text"></i></span><span class="admin-stat-card__value">{{ dashboard_stats.articles }}</span><span class="admin-stat-card__label">Статей</span></div>
+    <div class="admin-stat-card"><span class="admin-stat-card__icon"><i class="bi bi-check2-circle"></i></span><span class="admin-stat-card__value">{{ dashboard_stats.published_articles }}</span><span class="admin-stat-card__label">Опубликованных статей</span></div>
+    <div class="admin-stat-card"><span class="admin-stat-card__icon"><i class="bi bi-newspaper"></i></span><span class="admin-stat-card__value">{{ dashboard_stats.news }}</span><span class="admin-stat-card__label">Новостей</span></div>
+    <div class="admin-stat-card"><span class="admin-stat-card__icon"><i class="bi bi-broadcast"></i></span><span class="admin-stat-card__value">{{ dashboard_stats.published_news }}</span><span class="admin-stat-card__label">Опубликованных новостей</span></div>
+    <div class="admin-stat-card"><span class="admin-stat-card__icon"><i class="bi bi-envelope"></i></span><span class="admin-stat-card__value">{{ dashboard_stats.new_messages }}</span><span class="admin-stat-card__label">Новых обращений</span></div>
+</div>
 
-<h1>Админ-панель</h1>
+<section class="dashboard-panel">
+    <div class="dashboard-panel__heading"><div><p class="admin-topbar__eyebrow">Быстрый доступ</p><h2>Действия</h2></div></div>
+    <div class="quick-actions">
+        <a class="admin-button" href="{{ url_for('admin_guide.new_article') }}"><i class="bi bi-file-earmark-plus"></i> Добавить статью</a>
+        <a class="admin-button--secondary" href="{{ url_for('admin_news.new_news') }}"><i class="bi bi-newspaper"></i> Добавить новость</a>
+        <a class="admin-button--secondary" href="{{ url_for('admin_contacts.messages') }}"><i class="bi bi-envelope"></i> Открыть обращения</a>
+        <a class="admin-button--secondary" href="{{ url_for('admin_logs') }}"><i class="bi bi-clock-history"></i> Открыть журнал действий</a>
+        <a class="admin-button--secondary" href="/ru/" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right"></i> Открыть публичный сайт</a>
+    </div>
+</section>
 
-<ul>
-    <li><a href="{{ url_for('admin_guide.dashboard') }}">Путеводитель</a></li>
-    <li><a href="{{ url_for('admin_news.news_list') }}">Новости</a></li>
-    <li><a href="{{ url_for('admin_contacts.messages') }}">Контакты</a></li>
-    <li>Настройки</li>
-    <li><a href="{{ url_for('admin_logs') }}">Журнал действий</a></li>
-</ul>
-
-<form method="post" action="{{ url_for('admin_auth.logout') }}">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <button type="submit">Выйти</button>
-</form>
-
+<div class="dashboard-grid">
+    <section class="dashboard-panel">
+        <div class="dashboard-panel__heading"><h2>Последние действия</h2><a class="admin-back-link" href="{{ url_for('admin_logs') }}">Все действия</a></div>
+        {% if recent_logs %}<div class="mini-table-wrap"><table class="mini-table"><thead><tr><th>Дата</th><th>Пользователь</th><th>Действие</th><th>Описание</th></tr></thead><tbody>{% for log in recent_logs %}<tr><td>{{ log.created_at.strftime('%d.%m %H:%M') }}</td><td>{{ log.user.name or log.user.email }}</td><td>{{ log.action }}</td><td>{{ log.description }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="empty-state">Пока нет действий</p>{% endif %}
+    </section>
+    <section class="dashboard-panel">
+        <div class="dashboard-panel__heading"><h2>Последние обращения</h2><a class="admin-back-link" href="{{ url_for('admin_contacts.messages') }}">Все обращения</a></div>
+        {% if recent_messages %}<div class="mini-table-wrap"><table class="mini-table"><thead><tr><th>Дата</th><th>Имя</th><th>Email</th><th>Тема</th><th>Статус</th></tr></thead><tbody>{% for message in recent_messages %}<tr><td>{{ message.created_at.strftime('%d.%m %H:%M') }}</td><td>{{ message.name }}</td><td>{{ message.email }}</td><td><a href="{{ url_for('admin_contacts.message_detail', message_id=message.id) }}">{{ message.subject }}</a></td><td><span class="admin-badge {{ 'admin-badge--new' if message.status == 'new' else 'admin-badge--read' }}">{{ message.status }}</span></td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="empty-state">Пока нет обращений</p>{% endif %}
+    </section>
+    <section class="dashboard-panel dashboard-panel--wide">
+        <div class="dashboard-panel__heading"><h2>Последние статьи</h2><a class="admin-back-link" href="{{ url_for('admin_guide.articles') }}">Все статьи</a></div>
+        {% if recent_articles %}<div class="mini-table-wrap"><table class="mini-table"><thead><tr><th>Название</th><th>Категория</th><th>Язык</th><th>Статус</th><th></th></tr></thead><tbody>{% for article in recent_articles %}<tr><td>{{ article.title }}</td><td>{{ article.category.title }}</td><td>{{ article.language }}</td><td><span class="admin-badge {{ 'admin-badge--published' if article.is_published else 'admin-badge--hidden' }}">{{ 'published' if article.is_published else 'hidden' }}</span></td><td><a class="admin-action-link" href="{{ url_for('admin_guide.edit_article', article_id=article.id) }}">Редактировать</a></td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="empty-state">Пока нет статей</p>{% endif %}
+    </section>
+    <section class="dashboard-panel">
+        <div class="dashboard-panel__heading"><h2>Контент по языкам</h2></div>
+        <div class="language-counts">{% for lang, count in language_article_counts.items() %}<div><span>{{ lang }}</span><strong>{{ count }}</strong><small>статей</small></div>{% endfor %}</div>
+    </section>
+</div>
 {% endblock %}
