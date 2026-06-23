@@ -20,6 +20,38 @@
       copyError: 'Could not copy',
     },
   }[language] || {};
+
+  const header = document.querySelector('.header');
+  const headerInner = header?.querySelector('.header__inner');
+  const mainNav = header?.querySelector('.main-nav');
+  if (header && headerInner && mainNav) {
+    const menuButton = document.createElement('button');
+    const menuLabel = { ru: 'Открыть меню', fi: 'Avaa valikko', en: 'Open menu' }[language] || 'Open menu';
+    menuButton.type = 'button';
+    menuButton.className = 'mobile-menu-toggle';
+    menuButton.setAttribute('aria-label', menuLabel);
+    menuButton.setAttribute('aria-controls', 'mobile-main-nav');
+    menuButton.setAttribute('aria-expanded', 'false');
+    menuButton.textContent = '☰';
+    mainNav.id = 'mobile-main-nav';
+    headerInner.append(menuButton);
+
+    const closeMobileMenu = () => {
+      header.classList.remove('is-mobile-menu-open');
+      menuButton.setAttribute('aria-expanded', 'false');
+    };
+
+    menuButton.addEventListener('click', () => {
+      const isOpen = header.classList.toggle('is-mobile-menu-open');
+      menuButton.setAttribute('aria-expanded', String(isOpen));
+    });
+    mainNav.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMobileMenu));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeMobileMenu();
+    });
+    window.matchMedia('(min-width: 769px)').addEventListener('change', closeMobileMenu);
+  }
+
   const elements = document.querySelectorAll('.reveal');
   if (!elements.length || !('IntersectionObserver' in window)) {
     elements.forEach((element) => element.classList.add('is-visible'));

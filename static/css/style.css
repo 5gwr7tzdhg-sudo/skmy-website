@@ -761,3 +761,152 @@ footer{
 @media (prefers-reduced-motion: reduce) {
     .home-hero { animation: none; }
 }
+
+/* Mobile header: compact controls and a native JavaScript menu. */
+.mobile-menu-toggle { display: none; }
+
+@media (max-width: 768px) {
+    .header { overflow: visible; }
+
+    .header__inner {
+        position: relative;
+        width: 100%;
+        min-height: 58px;
+        padding: 0 16px;
+        gap: 8px;
+        flex-wrap: nowrap;
+    }
+
+    .site-logo { height: 19px; }
+
+    .logo { margin-right: auto; }
+
+    .lang-nav {
+        order: initial;
+        width: auto;
+        margin-left: 0;
+        padding-left: 8px;
+        gap: 2px;
+        border-left: 1px solid var(--line);
+    }
+
+    .lang-nav a { min-height: 30px; padding: 3px 5px; font-size: 11px; }
+    .lang-nav__separator { display: none; }
+
+    .mobile-menu-toggle {
+        display: inline-grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: #fff;
+        color: var(--accent-deep);
+        font: 22px/1 system-ui, sans-serif;
+        cursor: pointer;
+        transition: background-color .18s ease, border-color .18s ease, transform .18s ease;
+    }
+
+    .mobile-menu-toggle:hover { background: var(--mist); }
+    .mobile-menu-toggle:active { transform: scale(.96); }
+
+    .main-nav {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 16px;
+        left: 16px;
+        z-index: 30;
+        display: grid;
+        width: auto;
+        max-height: 0;
+        margin: 0;
+        padding: 0 18px;
+        gap: 0;
+        overflow: hidden;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, .98);
+        box-shadow: 0 14px 32px rgba(11, 79, 108, .10);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-6px);
+        transition: max-height .2s ease, padding .2s ease, opacity .16s ease, transform .2s ease, border-color .2s ease;
+    }
+
+    .main-nav a {
+        display: flex;
+        align-items: center;
+        min-height: 42px;
+        padding: 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 14px;
+        white-space: normal;
+    }
+
+    .main-nav a:last-child { border-bottom: 0; }
+
+    .header.is-mobile-menu-open .main-nav {
+        max-height: 360px;
+        padding-block: 6px;
+        border-color: var(--line);
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    .home-hero { box-shadow: 0 20px 60px rgba(0, 0, 0, .05); }
+}
+
+/* Hero depth: restrained light and geometry, without decorative particles. */
+@keyframes home-hero-breathe {
+    0%, 100% { background-position: 0% 50%, 0% 50%; }
+    50% { background-position: 100% 50%, 100% 50%; }
+}
+
+.home-hero {
+    isolation: isolate;
+    background:
+        radial-gradient(ellipse 72% 100% at 88% 15%, rgba(176, 220, 241, .42), transparent 68%),
+        linear-gradient(115deg, #ffffff 0%, #edf7fc 36%, #d8edf8 64%, #f7fbfe 100%);
+    background-size: 145% 145%, 220% 220%;
+    animation-duration: 24s;
+}
+
+.home-hero::before {
+    position: absolute;
+    inset: -20% -12%;
+    z-index: -1;
+    background: linear-gradient(118deg, transparent 38%, rgba(255, 255, 255, .58) 49%, rgba(219, 240, 250, .22) 58%, transparent 70%);
+    content: "";
+    pointer-events: none;
+    transform: rotate(-5deg);
+}
+
+.home-hero::after {
+    right: -7%;
+    bottom: -42%;
+    width: min(39vw, 470px);
+    height: min(27vw, 325px);
+    border: 1px solid rgba(30, 136, 182, .26);
+    border-radius: 20px;
+    content: "";
+    opacity: .8;
+    pointer-events: none;
+    transform: rotate(-18deg);
+}
+
+.home-hero__content { z-index: 1; }
+
+@media (min-width: 769px) {
+    .home-hero { box-shadow: 0 24px 70px rgba(11, 79, 108, .08); }
+}
+
+@media (max-width: 700px) {
+    .home-hero::before { inset: -30% -65%; opacity: .68; }
+    .home-hero::after { right: -28%; bottom: -34%; width: 250px; height: 165px; opacity: .5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-hero { animation: none; }
+}
