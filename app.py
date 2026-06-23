@@ -10,6 +10,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from config import Config
 from database.db import db
 from database import models
+from database.migrations.translation_keys_20260623 import upgrade as upgrade_translation_keys
 
 from routes.public.home import home_bp
 from routes.public.about import about_bp
@@ -135,6 +136,12 @@ def admin_logs():
 def init_db():
     db.create_all()
     print("Database tables created.")
+
+
+@app.cli.command("migrate-translation-keys")
+def migrate_translation_keys():
+    upgrade_translation_keys(db.engine)
+    print("Translation-key migration applied.")
 
 
 @app.cli.command("create-admin")

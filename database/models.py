@@ -1,6 +1,11 @@
 from datetime import datetime
+from uuid import uuid4
 from flask_login import UserMixin
 from database.db import db
+
+
+def generate_translation_key():
+    return str(uuid4())
 
 
 class User(UserMixin, db.Model):
@@ -53,6 +58,9 @@ class News(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     language = db.Column(db.String(10), nullable=False)
+    translation_key = db.Column(
+        db.String(36), nullable=False, unique=True, default=generate_translation_key
+    )
     title = db.Column(db.String(255), nullable=False)
     slug = db.Column(db.String(150), nullable=False)
     summary = db.Column(db.Text)
@@ -70,6 +78,9 @@ class GuideCategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     slug = db.Column(db.String(100), nullable=False)
     language = db.Column(db.String(10), nullable=False)
+    translation_key = db.Column(
+        db.String(36), nullable=False, unique=True, default=generate_translation_key
+    )
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
     icon = db.Column(db.String(100))
@@ -98,6 +109,9 @@ class GuideArticle(db.Model):
     )
 
     language = db.Column(db.String(10), nullable=False)
+    translation_key = db.Column(
+        db.String(36), nullable=False, unique=True, default=generate_translation_key
+    )
     title = db.Column(db.String(255), nullable=False)
     slug = db.Column(db.String(150), nullable=False)
     summary = db.Column(db.Text)
