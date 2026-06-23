@@ -3,6 +3,7 @@ from flask import Blueprint, redirect, render_template, request
 from database.db import db
 from database.models import ContactMessage
 from routes.public.fi import fi_context
+from routes.public.page_seo import page_seo
 
 contacts_bp = Blueprint("contacts", __name__)
 
@@ -67,9 +68,12 @@ def contacts(lang):
             errors.append(error_text[3])
 
         if errors:
-            context = {"lang": lang, "errors": errors, "form_data": request.form}
+            context = {
+                "lang": lang, "errors": errors, "form_data": request.form,
+                **page_seo("contacts", lang),
+            }
             if lang == "fi":
-                context.update(fi_context("Yhteystiedot | SKMY", "Ota yhteyttä SKMY:hyn saadaksesi tietoa ja tukea Suomessa."))
+                context.update(fi_context(**page_seo("contacts", lang)))
                 return render_template("public/contacts_fi.html", **context)
             return render_template("public/contacts.html", **context)
 
@@ -84,9 +88,9 @@ def contacts(lang):
         db.session.add(contact_message)
         db.session.commit()
 
-        context = {"lang": lang, "success_message": "Kiitos! Viestisi on lähetetty." if lang == "fi" else "Спасибо! Ваше сообщение отправлено.", "form_data": {}}
+        context = {"lang": lang, "success_message": "Kiitos! Viestisi on lähetetty." if lang == "fi" else "Спасибо! Ваше сообщение отправлено.", "form_data": {}, **page_seo("contacts", lang)}
         if lang == "fi":
-            context.update(fi_context("Yhteystiedot | SKMY", "Ota yhteyttä SKMY:hyn saadaksesi tietoa ja tukea Suomessa."))
+            context.update(fi_context(**page_seo("contacts", lang)))
             return render_template("public/contacts_fi.html", **context)
         return render_template("public/contacts.html", **context)
 
@@ -98,6 +102,9 @@ def contacts(lang):
     if lang == "fi":
         return render_template(
             "public/contacts_fi.html", lang=lang, errors=[], form_data=form_data,
-            **fi_context("Yhteystiedot | SKMY", "Ota yhteyttä SKMY:hyn saadaksesi tietoa ja tukea Suomessa."),
+            **fi_context(**page_seo("contacts", lang)),
         )
-    return render_template("public/contacts.html", lang=lang, errors=[], form_data=form_data)
+    return render_template(
+        "public/contacts.html", lang=lang, errors=[], form_data=form_data,
+        **page_seo("contacts", lang),
+    )

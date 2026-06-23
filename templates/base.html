@@ -12,6 +12,7 @@
     <meta property="og:description" content="{{ meta_description|default('SKMY помогает глухим иммигрантам ориентироваться в Финляндии: услуги, права и практические инструкции.') }}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ base_url }}{{ request.path }}">
+    <meta property="og:image" content="https://skmy.fi/static/images/skmy-logo.png">
     <meta property="og:site_name" content="SKMY">
 
     <link rel="canonical" href="{{ base_url }}{{ request.path }}">
@@ -21,7 +22,17 @@
     <link rel="alternate" hreflang="en" href="{{ base_url }}{{ request.path.replace('/' ~ lang, '/en', 1) }}">
     {% endif %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    {% if ga_measurement_id %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_measurement_id|e }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', {{ ga_measurement_id|tojson }});
+    </script>
+    {% endif %}
 </head>
 
 <body class="public-site">

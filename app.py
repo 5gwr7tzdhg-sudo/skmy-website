@@ -44,7 +44,10 @@ db.init_app(app)
 
 @app.context_processor
 def inject_base_url():
-    return {"base_url": app.config["BASE_URL"]}
+    return {
+        "base_url": app.config["BASE_URL"],
+        "ga_measurement_id": app.config["GA_MEASUREMENT_ID"],
+    }
 
 login_manager = LoginManager()
 login_manager.login_view = "admin_auth.login"

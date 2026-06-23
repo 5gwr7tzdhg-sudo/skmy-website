@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 from flask import Blueprint, render_template, redirect
 from database.models import GuideCategory, GuideArticle
 from routes.public.fi import fi_context
+from routes.public.page_seo import page_seo
 
 guide_bp = Blueprint("guide", __name__)
 
@@ -118,9 +119,12 @@ def guide(lang):
     if lang == "fi":
         return render_template(
             "public/guide_fi.html", lang=lang, categories=categories,
-            **fi_context("Opas Suomeen | SKMY", "Selkeä opas Suomessa asumiseen: DVV, Kela, työnhaku, Migri, terveydenhuolto ja perhe."),
+            **fi_context(**page_seo("guide", lang)),
         )
-    return render_template("public/guide.html", lang=lang, categories=categories)
+    return render_template(
+        "public/guide.html", lang=lang, categories=categories,
+        **page_seo("guide", lang),
+    )
 
 
 @guide_bp.route("/<lang>/guide/<category_slug>")

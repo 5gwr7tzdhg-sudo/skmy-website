@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect
 from routes.public.fi import fi_context
+from routes.public.page_seo import page_seo
 
 interpreting_bp = Blueprint("interpreting", __name__)
 
@@ -32,10 +33,11 @@ def interpreting(lang):
         if lang == "ru"
         else "public/interpreting_localized.html"
     )
-    context = {"lang": lang, "navigation_labels": navigation_labels}
+    context = {
+        "lang": lang,
+        "navigation_labels": navigation_labels,
+        **page_seo("interpreting", lang),
+    }
     if lang == "fi":
-        context.update(fi_context(
-            "Viittomakielen tulkkaus | SKMY",
-            "Tietoa Kelan tulkkauspalvelusta, tulkin tilaamisesta ja tapaamisiin valmistautumisesta Suomessa.",
-        ))
+        context.update(fi_context(**page_seo("interpreting", lang)))
     return render_template(template_name, **context)

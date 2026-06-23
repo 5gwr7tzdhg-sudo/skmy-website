@@ -15,6 +15,7 @@ class Config:
     if ENV == "production" and not _base_url:
         raise RuntimeError("BASE_URL environment variable must be set in production.")
     BASE_URL = (_base_url or "http://127.0.0.1:5000").rstrip("/")
+    GA_MEASUREMENT_ID = os.getenv("GA_MEASUREMENT_ID", "").strip()
 
     SQLALCHEMY_DATABASE_URI = URL.create(
         drivername="postgresql+psycopg2",

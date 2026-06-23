@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect
 from routes.public.fi import fi_context
+from routes.public.page_seo import page_seo
 
 about_bp = Blueprint("about", __name__)
 
@@ -18,4 +19,4 @@ def about(lang):
                 "SKMY tukee kuuroja ja viittomakielisiä maahanmuuttajia Suomessa tarjoamalla tietoa, ohjausta ja yhteisön.",
             ),
         )
-    return render_template("public/about.html", lang=lang)
+    return render_template("public/about.html", lang=lang, **page_seo("about", lang))
