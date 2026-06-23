@@ -1,8 +1,9 @@
-from flask import Blueprint, abort, redirect, render_template, request, url_for
-from flask_login import current_user, login_required
+from flask import Blueprint, redirect, render_template, request, url_for
+from flask_login import current_user
 
 from database.db import db
 from database.models import AdminLog, GuideArticle, GuideCategory
+from routes.admin.auth import admin_required
 
 
 admin_guide_bp = Blueprint(
@@ -25,10 +26,9 @@ def log_admin_action(action, entity_type, entity_id, description):
 
 
 @admin_guide_bp.before_request
-@login_required
+@admin_required
 def require_admin():
-    if current_user.role != "admin":
-        abort(403)
+    return None
 
 
 @admin_guide_bp.route("")
@@ -422,3 +422,29 @@ def toggle_article_published(article_id):
     db.session.commit()
 
     return redirect(url_for("admin_guide.articles"))
+
+
+@admin_guide_bp.route("/articles/<int:article_id>/delete", methods=["GET", "POST"])
+def delete_article(article_id):
+    article = GuideArticle.query.get_or_404(article_id)
+
+    if request.method == "POST":
+        article_id = article.id
+        article_title = article.title
+        log_admin_action(
+            "Удаление",
+            "article",
+            article_id,
+            f"Удалена статья «{article_title}»."
+        )
+        db.session.delete(article)
+        db.session.commit()
+        return redirect(url_for("admin_guide.articles"))
+
+    return render_template(
+        "admin/confirm_delete.html",
+        entity_label="статью путеводителя",
+        entity_title=article.title,
+        cancel_url=url_for("admin_guide.articles"),
+        lang="ru"
+    )

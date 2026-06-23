@@ -1,8 +1,9 @@
-from flask import Blueprint, abort, redirect, render_template, url_for
-from flask_login import current_user, login_required
+from flask import Blueprint, redirect, render_template, url_for
+from flask_login import current_user
 
 from database.db import db
 from database.models import AdminLog, ContactMessage
+from routes.admin.auth import admin_required
 
 
 admin_contacts_bp = Blueprint(
@@ -13,10 +14,9 @@ admin_contacts_bp = Blueprint(
 
 
 @admin_contacts_bp.before_request
-@login_required
+@admin_required
 def require_admin():
-    if current_user.role != "admin":
-        abort(403)
+    return None
 
 
 @admin_contacts_bp.route("")

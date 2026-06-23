@@ -1,0 +1,15 @@
+{% extends "admin/admin_base.html" %}
+{% block page_title %}Подтверждение удаления{% endblock %}
+{% block content %}
+<div class="admin-detail-card">
+    <p class="admin-topbar__eyebrow">Необратимое действие</p>
+    <h2>Удалить {{ entity_label }}?</h2>
+    <p>Будет удалён материал: <strong>{{ entity_title }}</strong>.</p>
+    <p>Это действие нельзя отменить.</p>
+    <form class="admin-form__footer" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="admin-button--danger" type="submit">Удалить навсегда</button>
+        <a class="admin-back-link" href="{{ cancel_url }}">Отмена</a>
+    </form>
+</div>
+{% endblock %}

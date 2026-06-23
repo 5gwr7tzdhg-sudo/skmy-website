@@ -1,20 +1,20 @@
 from datetime import datetime
 
-from flask import Blueprint, abort, redirect, render_template, request, url_for
-from flask_login import current_user, login_required
+from flask import Blueprint, redirect, render_template, request, url_for
+from flask_login import current_user
 
 from database.db import db
 from database.models import AdminLog, News
+from routes.admin.auth import admin_required
 
 
 admin_news_bp = Blueprint("admin_news", __name__, url_prefix="/admin/news")
 
 
 @admin_news_bp.before_request
-@login_required
+@admin_required
 def require_admin():
-    if current_user.role != "admin":
-        abort(403)
+    return None
 
 
 def parse_published_at(value, is_published, errors):
@@ -187,3 +187,32 @@ def toggle_published(news_id):
     db.session.commit()
 
     return redirect(url_for("admin_news.news_list"))
+
+
+@admin_news_bp.route("/<int:news_id>/delete", methods=["GET", "POST"])
+def delete_news(news_id):
+    news_item = News.query.get_or_404(news_id)
+
+    if request.method == "POST":
+        news_id = news_item.id
+        news_title = news_item.title
+        db.session.add(
+            AdminLog(
+                user_id=current_user.id,
+                action="Удаление",
+                entity_type="news",
+                entity_id=news_id,
+                description=f"Удалена новость «{news_title}»."
+            )
+        )
+        db.session.delete(news_item)
+        db.session.commit()
+        return redirect(url_for("admin_news.news_list"))
+
+    return render_template(
+        "admin/confirm_delete.html",
+        entity_label="новость",
+        entity_title=news_item.title,
+        cancel_url=url_for("admin_news.news_list"),
+        lang="ru"
+    )

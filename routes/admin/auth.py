@@ -11,10 +11,12 @@ admin_auth_bp = Blueprint("admin_auth", __name__, url_prefix="/admin")
 
 
 def admin_required(view):
-    @login_required
     @wraps(view)
     def wrapped_view(*args, **kwargs):
-        if current_user.role != "admin":
+        if not current_user.is_authenticated:
+            return redirect(url_for("admin_auth.login"))
+
+        if not current_user.is_admin or not current_user.is_active:
             abort(403)
 
         return view(*args, **kwargs)
@@ -24,7 +26,7 @@ def admin_required(view):
 
 @admin_auth_bp.route("/login", methods=["GET", "POST"])
 def login():
-    if current_user.is_authenticated and current_user.role == "admin":
+    if current_user.is_authenticated and current_user.is_admin and current_user.is_active:
         return redirect(url_for("admin_dashboard"))
 
     error = None
@@ -35,7 +37,7 @@ def login():
 
         if (
             user
-            and user.role == "admin"
+            and user.is_admin
             and user.is_active
             and check_password_hash(user.password_hash, password)
         ):

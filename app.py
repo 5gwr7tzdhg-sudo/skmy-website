@@ -91,6 +91,12 @@ def admin_dashboard():
         "published_articles": GuideArticle.query.filter_by(is_published=True).count(),
         "news": News.query.count(),
         "published_news": News.query.filter_by(is_published=True).count(),
+        "draft_articles": GuideArticle.query.filter_by(is_published=False).count(),
+        "draft_news": News.query.filter_by(is_published=False).count(),
+        "drafts": (
+            GuideArticle.query.filter_by(is_published=False).count()
+            + News.query.filter_by(is_published=False).count()
+        ),
         "new_messages": ContactMessage.query.filter_by(status="new").count(),
     }
     language_article_counts = {
