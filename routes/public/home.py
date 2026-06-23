@@ -18,7 +18,7 @@ LOCALIZED_HOME_GUIDE_CONTENT = {
         "articles": [
             {"slug": "henkilotunnus", "category": "dvv", "title": "Miten saat henkilötunnuksen", "summary": "Mikä henkilötunnus on ja miksi sitä tarvitaan."},
             {"slug": "registration", "category": "dvv", "title": "Rekisteröityminen Suomessa", "summary": "Miten rekisteröit asumisesi ja osoitteesi."},
-            {"slug": "benefits", "category": "kela", "title": "Kelan etuudet", "summary": "Mitä etuuksia voit hakea Kelasta."},
+            {"slug": "omakela", "category": "kela", "title": "Kelan etuudet", "summary": "Mitä etuuksia voit hakea Kelasta."},
             {"slug": "interpreter", "category": "kela", "title": "Tulkkauspalvelu Kelan kautta", "summary": "Miten haet oikeutta tulkkauspalveluun."},
         ],
     },

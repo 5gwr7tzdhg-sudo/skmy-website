@@ -5,6 +5,7 @@ from flask import Flask, render_template
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFError, CSRFProtect
 from werkzeug.security import generate_password_hash
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from config import Config
 from database.db import db
@@ -34,6 +35,7 @@ from database.models import (
 
 app = Flask(__name__)
 app.config.from_object(Config)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
 
 csrf = CSRFProtect(app)
 
