@@ -157,6 +157,197 @@ def create_admin():
     db.session.commit()
     print("Administrator created: admin@skmy.local")
 
+RU_HENKILOTUNNUS_SUMMARY = (
+    "Понятная инструкция: что такое henkilötunnus, зачем он нужен, "
+    "где его получить и как подготовиться к обращению в DVV."
+)
+
+RU_HENKILOTUNNUS_CONTENT = """## Что такое henkilötunnus?
+
+Henkilötunnus — это финский личный идентификационный номер. Он помогает подтвердить личность при обращении в государственные службы и многие частные организации.
+
+Это личная информация: не передавайте номер незнакомым людям без необходимости.
+
+## Для чего он нужен?
+
+Henkilötunnus может понадобиться для:
+
+• регистрации места жительства и личных данных
+• обращения в Kela
+• открытия банковского счёта
+• трудоустройства и получения зарплаты
+• получения медицинских услуг
+• использования государственных электронных сервисов
+
+## Где его получить?
+
+В зависимости от вашей ситуации номер могут присвоить через Migri при рассмотрении заявления о разрешении на проживание или через DVV (Digital and Population Data Services Agency). DVV ведёт реестр населения и помогает зарегистрировать данные после переезда в Финляндию.
+
+Проверьте на официальной странице DVV, подходит ли вам обращение в DVV и нужно ли записываться на приём.
+
+[[action: Открыть официальную инструкцию DVV|https://dvv.fi/en/foreigner-registration]]
+
+## Что взять с собой?
+
+Обычно полезно иметь:
+
+• паспорт или другое действующее удостоверение личности
+• документ о праве на пребывание в Финляндии
+• адрес проживания в Финляндии, если он уже известен
+• договор о работе или справку от работодателя, если вы работаете
+• документ об учёбе, если вы учитесь
+• документы о семье, если вы регистрируетесь вместе с семьёй
+
+DVV может попросить дополнительные документы. Перед визитом проверьте актуальный список в официальной инструкции.
+
+## Как действовать?
+
+### Шаг 1. Подготовьте документы
+
+Соберите оригиналы документов и проверьте, что они действительны. Если вам нужна помощь с письмом или формой, попросите объяснить текст до посещения DVV.
+
+### Шаг 2. Запишитесь на приём, если это нужно
+
+Выберите услугу и время через официальную систему DVV. Заполняйте данные внимательно.
+
+[[action: Записаться на приём в DVV|https://secure.vihta.com/public-ng/dvv/#/reservation?service=HLO]]
+
+### Шаг 3. Подготовьтесь к общению
+
+Если для приёма нужен сурдопереводчик, закажите его заранее. Если право на переводческие услуги ещё не оформлено, посмотрите инструкции SKMY.
+
+[[action: Открыть раздел «Сурдоперевод»|/ru/interpreting]]
+
+### Шаг 4. Посетите DVV
+
+Сотрудник проверит личность и документы. Если чего-то не хватает, вам объяснят, какие сведения или документы нужно добавить.
+
+## Что делать дальше?
+
+После присвоения henkilötunnus сохраните решение и используйте номер только там, где он действительно нужен. При необходимости обновите сведения в Kela, банке, у работодателя или в других службах.
+
+Номер обычно остаётся тем же даже при переезде в другой город, но новый адрес нужно сообщать в нужные службы.
+
+Если письмо или решение непонятно, сохраните его и обратитесь в SKMY за помощью в понимании дальнейших шагов.
+
+## FAQ
+
+Вопрос: Можно ли получить henkilötunnus сразу после приезда?
+Ответ: Это зависит от вашей ситуации и документов. Проверьте подходящий порядок на официальном сайте DVV или Migri.
+
+Вопрос: Нужно ли получать новый номер после переезда?
+Ответ: Нет, номер обычно не меняется. Но новый адрес важно сообщить в нужные службы.
+
+Вопрос: Что делать, если я не понимаю форму или письмо?
+Ответ: Попросите объяснить текст простыми словами. Можно обратиться в DVV, Migri, SKMY или к человеку, которому вы доверяете."""
+
+EN_HENKILOTUNNUS_SUMMARY = (
+    "A clear guide to what a personal identity code is, why you need it, "
+    "where to get it and how to prepare for DVV."
+)
+
+EN_HENKILOTUNNUS_CONTENT = """## What is a personal identity code?
+
+A Finnish personal identity code (henkilötunnus) is a personal identifier used to confirm your identity with public authorities and many private services.
+
+Treat it as personal information and do not share it unnecessarily.
+
+## What do you need it for?
+
+You may need a personal identity code for:
+
+• registering your personal details and address
+• applying for Kela benefits
+• opening a bank account
+• employment and salary payments
+• healthcare services
+• using public online services
+
+## Where can you get it?
+
+Depending on your situation, the code may be issued by Migri while your residence-permit application is processed, or by DVV (the Digital and Population Data Services Agency). DVV maintains population data and can register your details after you move to Finland.
+
+Check DVV's official instructions to see which route applies to you and whether you need an appointment.
+
+[[action: Open DVV's official guidance|https://dvv.fi/en/foreigner-registration]]
+
+## What should you take with you?
+
+It is usually helpful to bring:
+
+• a passport or other valid identity document
+• proof of your right to stay in Finland
+• your Finnish address, if known
+• a work contract or employer's certificate, if you work
+• proof of studies, if you study
+• family documents, if you register with family members
+
+DVV may ask for further documents, so check its current guidance before visiting.
+
+## What happens next?
+
+Prepare your documents, book an appointment if needed, and attend DVV with the original documents. If you need a sign-language interpreter for the appointment, arrange it in advance.
+
+[[action: Book a DVV appointment|https://secure.vihta.com/public-ng/dvv/#/reservation?service=HLO]]
+
+After your details have been processed, use the code only where it is needed. You may also need to update your details with Kela, your bank or employer. The code normally stays the same when you move, but your address should be kept up to date.
+
+## FAQ
+
+Question: Can I get a personal identity code immediately after arriving?
+Answer: It depends on your situation and documents. Check the official guidance from DVV or Migri for the route that applies to you.
+
+Question: Do I need a new code after moving to another city?
+Answer: No. The code normally stays the same, but you should report your new address to the relevant services."""
+
+HENKILOTUNNUS_OFFICIAL_LINKS = (
+    "DVV: registration of a foreigner|https://dvv.fi/en/foreigner-registration"
+)
+
+
+def upsert_henkilotunnus_article(language, title, summary, content):
+    category = GuideCategory.query.filter_by(language=language, slug="dvv").first()
+    if not category:
+        category = GuideCategory(
+            language=language,
+            slug="dvv",
+            title="DVV",
+            description="Personal identity codes, registration, addresses and personal data.",
+            sort_order=1,
+            is_active=True,
+        )
+        db.session.add(category)
+        db.session.flush()
+
+    article = GuideArticle.query.filter_by(
+        category_id=category.id, language=language, slug="henkilotunnus"
+    ).first()
+    if not article:
+        article = GuideArticle(category_id=category.id, language=language, slug="henkilotunnus")
+        db.session.add(article)
+
+    article.title = title
+    article.summary = summary
+    article.content = content
+    article.official_links = HENKILOTUNNUS_OFFICIAL_LINKS
+    article.keywords = "henkilötunnus, personal identity code, DVV, registration in Finland"
+    article.is_published = True
+    article.sort_order = 1
+
+
+@app.cli.command("seed-henkilotunnus-localizations")
+def seed_henkilotunnus_localizations():
+    """Create or update the Russian and English henkilötunnus guide articles."""
+    upsert_henkilotunnus_article(
+        "ru", "Как получить henkilötunnus", RU_HENKILOTUNNUS_SUMMARY, RU_HENKILOTUNNUS_CONTENT
+    )
+    upsert_henkilotunnus_article(
+        "en", "How to get a personal identity code", EN_HENKILOTUNNUS_SUMMARY, EN_HENKILOTUNNUS_CONTENT
+    )
+    db.session.commit()
+    print("Russian and English henkilötunnus articles created or updated.")
+
+
 @app.cli.command("seed-db")
 def seed_db():
     from database.models import GuideCategory, GuideArticle
@@ -227,8 +418,8 @@ def seed_db():
             "language": "ru",
             "title": "Как получить henkilötunnus",
             "slug": "henkilotunnus",
-            "summary": "Что такое henkilötunnus и зачем он нужен.",
-            "content": "Henkilötunnus — это финский личный идентификационный номер. Он нужен для регистрации, банковских услуг, Kela, работы и многих государственных сервисов.",
+            "summary": RU_HENKILOTUNNUS_SUMMARY,
+            "content": RU_HENKILOTUNNUS_CONTENT,
             "sort_order": 1,
         },
         {
