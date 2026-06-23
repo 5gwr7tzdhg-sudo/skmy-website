@@ -104,7 +104,7 @@ def home(lang):
     localized_page = {
         "fi": {
             "template": "public/home_localized.html",
-            "meta_title": "SKMY — tukea kuuroille maahanmuuttajille Suomessa",
+            "meta_title": "SKMY – Tietoa ja tukea kuuroille maahanmuuttajille Suomessa",
             "meta_description": "SKMY auttaa kuuroja ja viittomakielisiä maahanmuuttajia löytämään palvelut, oikeudet ja käytännön ohjeet Suomessa.",
             "navigation_labels": {
                 "home": "Etusivu", "about": "Tietoa meistä", "news": "Uutiset",
