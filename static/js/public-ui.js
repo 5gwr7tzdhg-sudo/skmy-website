@@ -34,6 +34,12 @@
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -24px' });
 
+  // The guide topics form a short, intentional sequence rather than appearing
+  // as one block. Direction remains in CSS, so the effect stays responsive.
+  document.querySelectorAll('.home-guide-card.reveal').forEach((card, index) => {
+    card.style.transitionDelay = `${index * 90}ms`;
+  });
+
   elements.forEach((element) => observer.observe(element));
 
   const copyText = async (text) => {

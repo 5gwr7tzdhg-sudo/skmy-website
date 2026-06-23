@@ -726,3 +726,38 @@ footer{
 .interpreter-template-card__back button[data-copy-template] { max-width: 100%; text-align: left; white-space: normal; }
 
 .interpreting-vatu__actions .home-button,.interpreting-support__actions .home-button { display: inline-flex; align-items: center; gap: 8px; }.interpreting-vatu__phone > .bi { margin-right: 6px; color: var(--accent); font-size: 18px; vertical-align: -2px; }.interpreting-vatu__badge .bi { margin-right: 3px; font-size: 14px; }.interpreter-template-card__front > .bi { margin-bottom: 14px; color: var(--accent-bright); font-size: 20px; line-height: 1; }
+
+/* Calm Finland-inspired motion for the homepage hero. */
+@keyframes home-hero-breathe {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.home-hero {
+    background: linear-gradient(115deg, #ffffff 0%, #edf7fc 38%, #dceff9 68%, #f7fbfe 100%);
+    background-size: 200% 200%;
+    animation: home-hero-breathe 28s ease-in-out infinite;
+}
+
+/* Keep the alternating reveal calm and readable on narrow screens. */
+@media (max-width: 700px) {
+    .home-guide-card.reveal--from-left,
+    .home-guide-card.reveal--from-right {
+        transform: translateY(16px);
+    }
+
+    .main-nav a,
+    .lang-nav a,
+    .home-button,
+    .home-search button {
+        min-height: 44px;
+    }
+
+    .home-hero h1 {
+        font-size: clamp(38px, 11vw, 50px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-hero { animation: none; }
+}
