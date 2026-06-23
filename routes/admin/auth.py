@@ -5,6 +5,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash
 
 from database.models import User
+from services.rate_limit import rate_limiter
 
 
 admin_auth_bp = Blueprint("admin_auth", __name__, url_prefix="/admin")
@@ -31,6 +32,11 @@ def login():
 
     error = None
     if request.method == "POST":
+        client_ip = request.remote_addr or "unknown"
+        if not rate_limiter.allow(f"admin-login:{client_ip}", limit=5, window_seconds=900):
+            error = "Слишком много попыток. Повторите через 15 минут."
+            return render_template("admin/login.html", error=error, lang="ru"), 429
+
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
         user = User.query.filter_by(email=email).first()

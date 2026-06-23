@@ -16,6 +16,8 @@ class Config:
         raise RuntimeError("BASE_URL environment variable must be set in production.")
     BASE_URL = (_base_url or "http://127.0.0.1:5000").rstrip("/")
     GA_MEASUREMENT_ID = os.getenv("GA_MEASUREMENT_ID", "").strip()
+    MATOMO_URL = os.getenv("MATOMO_URL", "").strip().rstrip("/")
+    MATOMO_SITE_ID = os.getenv("MATOMO_SITE_ID", "").strip()
 
     SQLALCHEMY_DATABASE_URI = URL.create(
         drivername="postgresql+psycopg2",
@@ -31,3 +33,4 @@ class Config:
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
     SESSION_COOKIE_SECURE = ENV == "production"
+    PERMANENT_SESSION_LIFETIME = 60 * 60 * 8

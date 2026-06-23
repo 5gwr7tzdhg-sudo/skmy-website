@@ -18,25 +18,26 @@
 <form class="reveal" method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <input type="hidden" name="language" value="{{ lang }}">
+    <p class="form-honeypot" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></p>
 
     <p>
         <label for="name">Имя *</label><br>
-        <input id="name" name="name" value="{{ form_data.get('name', '') }}" required>
+        <input id="name" name="name" value="{{ form_data.get('name', '') }}" required maxlength="120">
     </p>
 
     <p>
         <label for="email">Email *</label><br>
-        <input id="email" name="email" type="email" value="{{ form_data.get('email', '') }}" required>
+        <input id="email" name="email" type="email" value="{{ form_data.get('email', '') }}" required maxlength="254">
     </p>
 
     <p>
         <label for="subject">Тема *</label><br>
-        <input id="subject" name="subject" value="{{ form_data.get('subject', '') }}" required>
+        <input id="subject" name="subject" value="{{ form_data.get('subject', '') }}" required maxlength="200">
     </p>
 
     <p>
         <label for="message">Сообщение *</label><br>
-        <textarea id="message" name="message" rows="8" required>{{ form_data.get('message', '') }}</textarea>
+        <textarea id="message" name="message" rows="8" required maxlength="5000">{{ form_data.get('message', '') }}</textarea>
     </p>
 
     <button type="submit">Отправить</button>

@@ -1,8 +1,9 @@
 import os
 from datetime import datetime
+from urllib.parse import urlsplit
 
 import click
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFError, CSRFProtect
 from werkzeug.security import generate_password_hash
@@ -45,11 +46,46 @@ csrf = CSRFProtect(app)
 db.init_app(app)
 
 
+@app.after_request
+def add_security_headers(response):
+    matomo_origin = ""
+    if app.config["MATOMO_URL"]:
+        parsed = urlsplit(app.config["MATOMO_URL"])
+        if parsed.scheme in {"http", "https"} and parsed.netloc:
+            matomo_origin = f" {parsed.scheme}://{parsed.netloc}"
+
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = (
+        "camera=(), geolocation=(), microphone=(), payment=(), usb=()"
+    )
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "base-uri 'self'; "
+        "object-src 'none'; "
+        "frame-ancestors 'self'; "
+        "form-action 'self'; "
+        "img-src 'self' data: https:; "
+        "font-src 'self' data: https://cdn.jsdelivr.net; "
+        "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+        f"script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com{matomo_origin}; "
+        f"connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com{matomo_origin}"
+    )
+    if app.config["ENV"] == "production":
+        response.headers["Strict-Transport-Security"] = (
+            "max-age=31536000; includeSubDomains"
+        )
+    return response
+
+
 @app.context_processor
 def inject_base_url():
     return {
         "base_url": app.config["BASE_URL"],
         "ga_measurement_id": app.config["GA_MEASUREMENT_ID"],
+        "matomo_url": app.config["MATOMO_URL"],
+        "matomo_site_id": app.config["MATOMO_SITE_ID"],
     }
 
 login_manager = LoginManager()
@@ -69,6 +105,22 @@ def handle_csrf_error(error):
         reason=error.description,
         lang="ru"
     ), 400
+
+
+def public_error_language():
+    language = request.path.strip("/").split("/", 1)[0]
+    return language if language in ("fi", "ru", "en") else "fi"
+
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template("errors/404.html", lang=public_error_language()), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return render_template("errors/500.html", lang=public_error_language()), 500
 
 app.register_blueprint(home_bp)
 app.register_blueprint(about_bp)

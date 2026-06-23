@@ -1,11 +1,19 @@
+import re
+
 from flask import Blueprint, redirect, render_template, request
 
 from database.db import db
 from database.models import ContactMessage
 from routes.public.fi import fi_context
 from routes.public.page_seo import page_seo
+from services.rate_limit import rate_limiter
 
 contacts_bp = Blueprint("contacts", __name__)
+EMAIL_PATTERN = re.compile(r"^[^@\s]{1,64}@[^@\s]{1,253}$")
+MAX_NAME_LENGTH = 120
+MAX_EMAIL_LENGTH = 254
+MAX_SUBJECT_LENGTH = 200
+MAX_MESSAGE_LENGTH = 5000
 
 
 INTERPRETING_SUPPORT_SUBJECT = "Нужна помощь с сурдопереводом"
@@ -51,6 +59,7 @@ def contacts(lang):
         email = request.form.get("email", "").strip()
         subject = request.form.get("subject", "").strip()
         message = request.form.get("message", "").strip()
+        honeypot = request.form.get("website", "").strip()
 
         errors = []
         error_text = (
@@ -66,6 +75,27 @@ def contacts(lang):
             errors.append(error_text[2])
         if not message:
             errors.append(error_text[3])
+        if email and (len(email) > MAX_EMAIL_LENGTH or not EMAIL_PATTERN.fullmatch(email)):
+            errors.append("Tarkista sähköpostiosoite." if lang == "fi" else "Проверьте email.")
+        if len(name) > MAX_NAME_LENGTH:
+            errors.append("Nimi on liian pitkä." if lang == "fi" else "Имя слишком длинное.")
+        if len(subject) > MAX_SUBJECT_LENGTH:
+            errors.append("Aihe on liian pitkä." if lang == "fi" else "Тема слишком длинная.")
+        if len(message) > MAX_MESSAGE_LENGTH:
+            errors.append("Viesti on liian pitkä." if lang == "fi" else "Сообщение слишком длинное.")
+
+        if honeypot:
+            errors = []
+            success_message = "Kiitos! Viestisi on lähetetty." if lang == "fi" else "Спасибо! Ваше сообщение отправлено."
+            context = {"lang": lang, "success_message": success_message, "form_data": {}, **page_seo("contacts", lang)}
+            if lang == "fi":
+                context.update(fi_context(**page_seo("contacts", lang)))
+                return render_template("public/contacts_fi.html", **context)
+            return render_template("public/contacts.html", **context)
+
+        client_ip = request.remote_addr or "unknown"
+        if not rate_limiter.allow(f"contacts:{client_ip}", limit=5, window_seconds=3600):
+            errors.append("Yritä myöhemmin uudelleen." if lang == "fi" else "Попробуйте снова позднее.")
 
         if errors:
             context = {
