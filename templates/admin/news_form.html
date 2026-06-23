@@ -13,6 +13,9 @@
 
 <div class="admin-form-card"><form class="admin-form" method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    {% if form_data.get('translation_key') %}<input type="hidden" name="translation_key" value="{{ form_data.get('translation_key') }}">{% endif %}
+
+    {% if form_data.get('translation_key') %}<p class="admin-table__muted">Добавление языковой версии в существующий материал.</p>{% endif %}
 
     <p>
         <label for="language">Язык *</label><br>

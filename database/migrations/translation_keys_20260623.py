@@ -6,6 +6,7 @@ from sqlalchemy import inspect, text
 
 
 TABLES = ("news", "guide_categories", "guide_articles")
+UNIQUE_TRANSLATION_KEY_TABLES = ("guide_categories", "guide_articles")
 
 
 def upgrade(engine):
@@ -47,7 +48,7 @@ def upgrade(engine):
             connection.execute(
                 text(f"ALTER TABLE {table} ALTER COLUMN translation_key SET NOT NULL")
             )
-            if not has_unique_key[table]:
+            if table in UNIQUE_TRANSLATION_KEY_TABLES and not has_unique_key[table]:
                 connection.execute(
                     text(
                         f"CREATE UNIQUE INDEX IF NOT EXISTS "

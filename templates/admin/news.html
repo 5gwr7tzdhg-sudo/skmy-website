@@ -2,5 +2,35 @@
 {% block page_title %}Новости{% endblock %}
 {% block content %}
 <div class="admin-toolbar"><a class="admin-button" href="{{ url_for('admin_news.new_news') }}"><i class="bi bi-plus-lg"></i> Добавить новость</a></div>
-{% if news_items %}<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Заголовок</th><th>Язык</th><th>Slug / translation key</th><th>Дата публикации</th><th>Статус</th><th>Действия</th></tr></thead><tbody>{% for news_item in news_items %}<tr><td class="admin-table__title">{{ news_item.title }}</td><td>{{ news_item.language }}</td><td>{{ news_item.slug }}<br><small class="admin-table__muted">{{ news_item.translation_key }}</small></td><td>{{ news_item.published_at.strftime('%d.%m.%Y %H:%M') if news_item.published_at else '—' }}</td><td><span class="admin-badge {{ 'admin-badge--published' if news_item.is_published else 'admin-badge--hidden' }}">{{ "published" if news_item.is_published else "hidden" }}</span></td><td><div class="admin-actions"><a class="admin-action-link" href="{{ url_for('admin_news.edit_news', news_id=news_item.id) }}">Редактировать</a><form class="admin-inline-form" method="post" action="{{ url_for('admin_news.toggle_published', news_id=news_item.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="admin-button--secondary" type="submit">{{ "Скрыть" if news_item.is_published else "Опубликовать" }}</button></form><a class="admin-button--danger" href="{{ url_for('admin_news.delete_news', news_id=news_item.id) }}">Удалить</a></div></td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="admin-empty">Новостей пока нет.</p>{% endif %}
+{% set language_labels = {'fi': '🇫🇮 FI', 'ru': '🇷🇺 RU', 'en': '🇬🇧 EN'} %}
+{% if news_groups %}
+<div class="admin-table-wrap"><table class="admin-table admin-news-table"><thead><tr><th>Материал</th><th>Дата публикации</th><th>Языковые версии</th></tr></thead><tbody>
+{% for group in news_groups %}
+<tr>
+    <td class="admin-table__title">{{ group.title }}<br><small class="admin-table__muted">{{ group.translation_key }}</small></td>
+    <td>{{ group.published_at.strftime('%d.%m.%Y %H:%M') if group.published_at else '—' }}</td>
+    <td>
+        <div class="admin-news-localizations">
+        {% for language in news_languages %}
+            {% set news_item = group["items"].get(language) %}
+            <div class="admin-news-localization">
+            {% if news_item %}
+                <span>{{ language_labels[language] }}</span>
+                <span class="admin-badge {{ 'admin-badge--published' if news_item.is_published else 'admin-badge--hidden' }}">{{ '✅ published' if news_item.is_published else '📝 draft' }}</span>
+                <a class="admin-action-link" href="{{ url_for('admin_news.edit_news', news_id=news_item.id) }}">Редактировать</a>
+                <form class="admin-inline-form" method="post" action="{{ url_for('admin_news.toggle_published', news_id=news_item.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="admin-button--secondary" type="submit">{{ 'Скрыть' if news_item.is_published else 'Опубликовать' }}</button></form>
+                <a class="admin-button--danger" href="{{ url_for('admin_news.delete_news', news_id=news_item.id) }}">Удалить</a>
+            {% else %}
+                <span>{{ language_labels[language] }}</span>
+                <span class="admin-badge admin-badge--hidden">❌ missing</span>
+                <a class="admin-action-link" href="{{ url_for('admin_news.new_news', language=language, translation_key=group.translation_key) }}">Добавить перевод</a>
+            {% endif %}
+            </div>
+        {% endfor %}
+        </div>
+    </td>
+</tr>
+{% endfor %}
+</tbody></table></div>
+{% else %}<p class="admin-empty">Новостей пока нет.</p>{% endif %}
 {% endblock %}

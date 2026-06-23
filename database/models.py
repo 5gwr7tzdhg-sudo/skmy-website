@@ -59,7 +59,7 @@ class News(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     language = db.Column(db.String(10), nullable=False)
     translation_key = db.Column(
-        db.String(36), nullable=False, unique=True, default=generate_translation_key
+        db.String(36), nullable=False, default=generate_translation_key, index=True
     )
     title = db.Column(db.String(255), nullable=False)
     slug = db.Column(db.String(150), nullable=False)

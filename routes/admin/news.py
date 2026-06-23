@@ -9,6 +9,7 @@ from routes.admin.auth import admin_required
 
 
 admin_news_bp = Blueprint("admin_news", __name__, url_prefix="/admin/news")
+NEWS_LANGUAGES = ("fi", "ru", "en")
 
 
 @admin_news_bp.before_request
@@ -40,15 +41,49 @@ def log_news_action(action, news_item, description):
     )
 
 
+def build_news_groups(news_items):
+    groups = {}
+    for news_item in news_items:
+        group = groups.setdefault(
+            news_item.translation_key,
+            {
+                "translation_key": news_item.translation_key,
+                "items": {},
+                "title": news_item.title,
+                "published_at": news_item.published_at,
+            },
+        )
+        group["items"][news_item.language] = news_item
+        if news_item.language == "fi":
+            group["title"] = news_item.title
+        if news_item.published_at and (
+            group["published_at"] is None
+            or news_item.published_at > group["published_at"]
+        ):
+            group["published_at"] = news_item.published_at
+
+    return sorted(
+        groups.values(),
+        key=lambda group: group["published_at"] or datetime.min,
+        reverse=True,
+    )
+
+
 @admin_news_bp.route("")
 @admin_news_bp.route("/")
 def news_list():
     news_items = News.query.order_by(News.created_at.desc()).all()
-    return render_template("admin/news.html", news_items=news_items, lang="ru")
+    return render_template(
+        "admin/news.html",
+        news_groups=build_news_groups(news_items),
+        news_languages=NEWS_LANGUAGES,
+        lang="ru",
+    )
 
 
 @admin_news_bp.route("/new", methods=["GET", "POST"])
 def new_news():
+    translation_key = request.form.get("translation_key", "").strip()
     if request.method == "POST":
         language = request.form.get("language", "").strip()
         title = request.form.get("title", "").strip()
@@ -63,20 +98,27 @@ def new_news():
             errors.append("Укажите заголовок новости.")
         if not slug:
             errors.append("Укажите slug.")
+        if translation_key and News.query.filter_by(
+            translation_key=translation_key, language=language
+        ).first():
+            errors.append("Перевод для этого языка уже существует.")
 
         published_at = parse_published_at(published_at_value, is_published, errors)
 
         if not errors:
-            news_item = News(
-                language=language,
-                title=title,
-                slug=slug,
-                summary=request.form.get("summary", "").strip() or None,
-                content=request.form.get("content", "").strip() or None,
-                image_path=request.form.get("image_path", "").strip() or None,
-                is_published=is_published,
-                published_at=published_at
-            )
+            news_data = {
+                "language": language,
+                "title": title,
+                "slug": slug,
+                "summary": request.form.get("summary", "").strip() or None,
+                "content": request.form.get("content", "").strip() or None,
+                "image_path": request.form.get("image_path", "").strip() or None,
+                "is_published": is_published,
+                "published_at": published_at,
+            }
+            if translation_key:
+                news_data["translation_key"] = translation_key
+            news_item = News(**news_data)
             db.session.add(news_item)
             db.session.flush()
             log_news_action(
@@ -97,7 +139,11 @@ def new_news():
     return render_template(
         "admin/news_form.html",
         errors=[],
-        form_data={"is_published": "on"},
+        form_data={
+            "language": request.args.get("language", ""),
+            "translation_key": request.args.get("translation_key", ""),
+            "is_published": "on",
+        },
         lang="ru"
     )
 

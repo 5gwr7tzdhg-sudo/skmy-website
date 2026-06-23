@@ -12,6 +12,7 @@ from config import Config
 from database.db import db
 from database import models
 from database.migrations.translation_keys_20260623 import upgrade as upgrade_translation_keys
+from database.migrations.news_translation_groups import upgrade as upgrade_news_translation_groups
 
 from routes.public.home import home_bp
 from routes.public.about import about_bp
@@ -143,6 +144,58 @@ def init_db():
 def migrate_translation_keys():
     upgrade_translation_keys(db.engine)
     print("Translation-key migration applied.")
+
+
+@app.cli.command("migrate-news-translation-groups")
+def migrate_news_translation_groups():
+    """Allow translated news versions to share a translation key."""
+    upgrade_news_translation_groups(db.engine)
+    print("News translation-group migration applied.")
+
+
+INITIAL_NEWS_TRANSLATION_GROUPS = (
+    {
+        "fi": "skmy-perustettiin-27-10-2025",
+        "ru": "skmy-osnovana-27-10-2025",
+        "en": "skmy-founded-27-10-2025",
+    },
+    {
+        "fi": "kiitos-kuurojen-liitolle-yhteistyosta-ja-tuesta",
+        "ru": "spasibo-kuurojen-liitto-za-sotrudnichestvo-i-podderzhku",
+        "en": "thank-you-kuurojen-liitto-for-cooperation-and-support",
+    },
+    {
+        "fi": "skmy-n-verkkosivusto-julkaistu",
+        "ru": "veb-sait-skmy-opublikovan",
+        "en": "skmy-website-launched",
+    },
+)
+
+
+@app.cli.command("link-initial-news-translations")
+def link_initial_news_translations():
+    """Link only the three verified FI/RU/EN initial news groups."""
+    grouped_items = []
+    for group in INITIAL_NEWS_TRANSLATION_GROUPS:
+        items = {
+            language: News.query.filter_by(language=language, slug=slug).one_or_none()
+            for language, slug in group.items()
+        }
+        missing_languages = [language for language, item in items.items() if item is None]
+        if missing_languages:
+            raise click.ClickException(
+                "Cannot link a news group with missing languages: "
+                + ", ".join(missing_languages)
+            )
+        grouped_items.append(items)
+
+    for items in grouped_items:
+        shared_key = items["fi"].translation_key
+        for language in ("ru", "en"):
+            items[language].translation_key = shared_key
+
+    db.session.commit()
+    print("Three verified initial FI/RU/EN news groups linked.")
 
 
 @app.cli.command("create-admin")
