@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
+{% set text = {'fi': {'code': '404', 'title': 'Sivua ei löytynyt', 'copy': 'Etsimääsi sivua ei ole olemassa tai se on siirretty.', 'link': 'Siirry etusivulle'}, 'ru': {'code': '404', 'title': 'Страница не найдена', 'copy': 'Запрошенная страница не существует или была перемещена.', 'link': 'На главную'}, 'en': {'code': '404', 'title': 'Page not found', 'copy': 'The page you requested does not exist or has been moved.', 'link': 'Go to homepage'}}[lang] %}
+<section class="error-page reveal"><p class="error-page__code">{{ text.code }}</p><h1>{{ text.title }}</h1><p>{{ text.copy }}</p><a class="home-button home-button--primary" href="/{{ lang }}/">{{ text.link }}</a></section>
+{% endblock %}

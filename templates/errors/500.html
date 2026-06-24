@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
+{% set text = {'fi': {'code': '500', 'title': 'Palvelussa tapahtui virhe', 'copy': 'Yritä hetken kuluttua uudelleen.', 'link': 'Siirry etusivulle'}, 'ru': {'code': '500', 'title': 'В сервисе произошла ошибка', 'copy': 'Пожалуйста, попробуйте ещё раз немного позже.', 'link': 'На главную'}, 'en': {'code': '500', 'title': 'Something went wrong', 'copy': 'Please try again in a moment.', 'link': 'Go to homepage'}}[lang] %}
+<section class="error-page reveal"><p class="error-page__code">{{ text.code }}</p><h1>{{ text.title }}</h1><p>{{ text.copy }}</p><a class="home-button home-button--primary" href="/{{ lang }}/">{{ text.link }}</a></section>
+{% endblock %}

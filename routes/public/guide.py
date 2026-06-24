@@ -6,6 +6,7 @@ from flask import Blueprint, render_template, redirect
 from database.models import GuideCategory, GuideArticle
 from routes.public.fi import fi_context
 from routes.public.page_seo import page_seo
+from routes.public.category_seo import category_seo, faq_schema as category_faq_schema
 
 guide_bp = Blueprint("guide", __name__)
 
@@ -150,12 +151,30 @@ def guide_category(lang, category_slug):
         .all()
     )
 
+    seo_content = category_seo(category_slug, lang)
+    seo_context = {}
+    if seo_content:
+        seo_context = {
+            "category_seo": seo_content,
+            "faq_schema": category_faq_schema(seo_content["faq"]),
+            "meta_title": seo_content["title"],
+            "meta_description": seo_content["description"],
+        }
+
     if lang == "fi":
+        metadata = (
+            seo_content["title"], seo_content["description"]
+        ) if seo_content else (f"{category.title} | SKMY:n opas", category.description)
+        seo_context.pop("meta_title", None)
+        seo_context.pop("meta_description", None)
         return render_template(
             "public/guide_category_fi.html", lang=lang, category=category, articles=articles,
-            **fi_context(f"{category.title} | SKMY:n opas", category.description),
+            **seo_context, **fi_context(*metadata),
         )
-    return render_template("public/guide_category.html", lang=lang, category=category, articles=articles)
+    return render_template(
+        "public/guide_category.html", lang=lang, category=category, articles=articles,
+        **seo_context,
+    )
 
 @guide_bp.route("/<lang>/guide/<category_slug>/<article_slug>")
 def guide_article(lang, category_slug, article_slug):

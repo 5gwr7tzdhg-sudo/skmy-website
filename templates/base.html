@@ -14,6 +14,10 @@
     <meta property="og:url" content="{{ base_url }}{{ request.path }}">
     <meta property="og:image" content="https://skmy.fi/static/images/skmy-logo.png">
     <meta property="og:site_name" content="SKMY">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ meta_title|default('SKMY — поддержка глухих иммигрантов в Финляндии') }}">
+    <meta name="twitter:description" content="{{ meta_description|default('SKMY помогает глухим иммигрантам ориентироваться в Финляндии: услуги, права и практические инструкции.') }}">
+    <meta name="twitter:image" content="https://skmy.fi/static/images/skmy-logo.png">
 
     <link rel="canonical" href="{{ base_url }}{{ request.path }}">
     {% if not request.path.startswith('/admin') %}
@@ -24,13 +28,29 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    {% if ga_measurement_id %}
+    {% if ga_measurement_id and not (matomo_url and matomo_site_id) %}
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_measurement_id|e }}"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', {{ ga_measurement_id|tojson }});
+    </script>
+    {% endif %}
+    {% if matomo_url and matomo_site_id %}
+    <script>
+        window._paq = window._paq || [];
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function () {
+            const trackerUrl = {{ (matomo_url ~ '/')|tojson }};
+            _paq.push(['setTrackerUrl', trackerUrl + 'matomo.php']);
+            _paq.push(['setSiteId', {{ matomo_site_id|tojson }}]);
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = trackerUrl + 'matomo.js';
+            document.head.appendChild(script);
+        }());
     </script>
     {% endif %}
 </head>

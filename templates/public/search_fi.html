@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="public-page-heading reveal"><p class="home-eyebrow">SKMY:N OPAS</p><h1>Haku oppaasta</h1></div>
-<form class="public-search reveal" method="get" action="{{ url_for('search.search', lang=lang) }}"><label for="search-query">Hakusana</label><br><input id="search-query" name="q" type="search" value="{{ query }}"><button type="submit">Hae</button></form>
-{% if message %}<p>{{ message }}</p>{% endif %}{% if articles %}<div class="article-list">{% for article in articles %}<article class="article-card reveal"><h2><a href="/fi/guide/{{ article.category.slug }}/{{ article.slug }}">{{ article.title }}</a></h2><p><strong>Aihe:</strong> {{ article.category.title }}</p><p>{{ article.summary }}</p></article>{% endfor %}</div>{% endif %}
+<div class="public-page-heading reveal"><p class="home-eyebrow">SKMY</p><h1>Haku</h1></div>
+<form class="public-search reveal" method="get" action="{{ url_for('search.search', lang=lang) }}"><label for="search-query">Hae oppaasta ja uutisista</label><br><input id="search-query" name="q" type="search" value="{{ query }}"><button type="submit">Hae</button></form>
+{% if message %}<p>{{ message }}</p>{% endif %}
+{% if articles %}<section class="search-results"><h2>Oppaan artikkelit</h2><div class="article-list">{% for article in articles %}<article class="article-card reveal"><h3><a href="/fi/guide/{{ article.category.slug }}/{{ article.slug }}">{{ article.title }}</a></h3><p><strong>Aihe:</strong> {{ article.category.title }}</p><p>{{ article.summary }}</p></article>{% endfor %}</div></section>{% endif %}
+{% if news_items %}<section class="search-results"><h2>Uutiset</h2><div class="article-list">{% for news_item in news_items %}<article class="article-card reveal"><h3><a href="/fi/news/{{ news_item.slug }}">{{ news_item.title }}</a></h3><p>{{ news_item.summary }}</p></article>{% endfor %}</div></section>{% endif %}
 {% endblock %}

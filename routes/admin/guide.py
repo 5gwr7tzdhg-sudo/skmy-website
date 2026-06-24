@@ -11,6 +11,7 @@ admin_guide_bp = Blueprint(
     __name__,
     url_prefix="/admin/guide"
 )
+GUIDE_LANGUAGES = ("fi", "ru", "en")
 
 
 def log_admin_action(action, entity_type, entity_id, description):
@@ -22,6 +23,31 @@ def log_admin_action(action, entity_type, entity_id, description):
             entity_id=entity_id,
             description=description
         )
+    )
+
+
+def build_article_groups(articles):
+    groups = {}
+    for article in articles:
+        group = groups.setdefault(
+            article.translation_key,
+            {
+                "translation_key": article.translation_key,
+                "items": {},
+                "title": article.title,
+                "category_title": article.category.title,
+                "sort_order": article.sort_order,
+            },
+        )
+        group["items"][article.language] = article
+        if article.language == "fi":
+            group["title"] = article.title
+            group["category_title"] = article.category.title
+        group["sort_order"] = min(group["sort_order"], article.sort_order)
+
+    return sorted(
+        groups.values(),
+        key=lambda group: (group["category_title"].lower(), group["sort_order"], group["title"].lower()),
     )
 
 
@@ -214,7 +240,8 @@ def articles():
 
     return render_template(
         "admin/guide_articles.html",
-        articles=articles,
+        article_groups=build_article_groups(articles),
+        article_languages=GUIDE_LANGUAGES,
         lang="ru"
     )
 

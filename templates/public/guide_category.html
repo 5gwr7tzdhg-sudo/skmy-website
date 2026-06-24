@@ -4,7 +4,7 @@
 
 <div class="public-page-heading reveal"><a href="/{{ lang }}/guide" class="back-link">← Назад к путеводителю</a>
 
-<h1>{{ category.title }}</h1>
+<h1>{{ category_seo.h1 if category_seo else category.title }}</h1>
 
 <p class="page-intro">
     {{ category.description }}
@@ -34,5 +34,12 @@
     {% endif %}
 
 </div>
+
+{% if category_seo %}
+<section class="guide-article reveal" aria-labelledby="category-information"><h2 id="category-information">{{ category_seo.h1 }}</h2>{% for heading, text in category_seo.sections %}<h3>{{ heading }}</h3><p>{{ text }}</p>{% endfor %}</section>
+<section class="article-next-steps reveal" aria-labelledby="related-guides"><div class="article-next-steps__heading"><h2 id="related-guides">{{ 'Related guides' if lang == 'en' else 'Связанные инструкции' }}</h2><p>{{ 'Continue with the service that matches your situation.' if lang == 'en' else 'Продолжите с услугой, которая соответствует вашей ситуации.' }}</p></div><div class="article-next-steps__grid"><a href="/{{ lang }}/guide/dvv/henkilotunnus"><strong>DVV</strong><span>{{ 'Personal identity code and registration.' if lang == 'en' else 'Henkilötunnus и регистрация.' }}</span><b>→</b></a><a href="/{{ lang }}/guide/kela"><strong>Kela</strong><span>{{ 'Benefits and interpreting services.' if lang == 'en' else 'Пособия и услуги перевода.' }}</span><b>→</b></a><a href="/{{ lang }}/guide/migri"><strong>Migri</strong><span>{{ 'Residence permits and immigration.' if lang == 'en' else 'ВНЖ и миграционные вопросы.' }}</span><b>→</b></a><a href="/{{ lang }}/guide/te"><strong>TE-palvelut</strong><span>{{ 'Job search and employment support.' if lang == 'en' else 'Поиск работы и поддержка.' }}</span><b>→</b></a></div></section>
+<section class="article-faq reveal" aria-labelledby="category-faq"><h2 id="category-faq">{{ 'Frequently asked questions' if lang == 'en' else 'Частые вопросы' }}</h2>{% for question, answer in category_seo.faq %}<div class="article-faq__item"><h3>{{ question }}</h3><p>{{ answer }}</p></div>{% endfor %}</section>
+<script type="application/ld+json">{{ faq_schema|safe }}</script>
+{% endif %}
 
 {% endblock %}
