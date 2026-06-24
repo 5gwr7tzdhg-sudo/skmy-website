@@ -2,8 +2,10 @@
 {% block content %}
 <div class="public-page-heading reveal"><a href="/fi/guide" class="back-link">← Takaisin oppaaseen</a><h1>{{ category_seo.h1 if category_seo else category.title }}</h1><p class="page-intro">{{ category.description }}</p></div>
 <div class="article-list">{% if articles %}{% for article in articles %}<a class="article-card reveal" href="/fi/guide/{{ category.slug }}/{{ article.slug }}"><h2>{{ article.title }}</h2><p>{{ article.summary }}</p></a>{% endfor %}{% else %}<div class="article-placeholder"><h2>Aiheen artikkelit</h2><p>Ohjeita, asiakirjoja, linkkejä ja vastauksia usein kysyttyihin kysymyksiin julkaistaan täällä myöhemmin.</p></div>{% endif %}</div>
-{% if category_seo %}
+{% if category_seo and category.slug != 'dvv' %}
 <section class="guide-article reveal" aria-labelledby="category-information"><h2 id="category-information">{{ category_seo.h1 }}</h2>{% for heading, text in category_seo.sections %}<h3>{{ heading }}</h3><p>{{ text }}</p>{% endfor %}</section>
+{% endif %}
+{% if category_seo %}
 <section class="article-next-steps reveal" aria-labelledby="related-guides"><div class="article-next-steps__heading"><h2 id="related-guides">Aiheeseen liittyvät ohjeet</h2><p>Jatka seuraavaan palveluun oman tilanteesi mukaan.</p></div><div class="article-next-steps__grid"><a href="/fi/guide/dvv/henkilotunnus"><strong>DVV ja henkilötunnus</strong><span>Rekisteröi tiedot ja osoite Suomessa.</span><b>Lue DVV-ohje →</b></a><a href="/fi/guide/kela"><strong>Kela ja tulkkauspalvelu</strong><span>Selvitä etuudet ja tulkin tilaaminen.</span><b>Lue Kela-ohje →</b></a><a href="/fi/guide/migri"><strong>Migri ja oleskelulupa</strong><span>Katso lupa-asioiden seuraavat vaiheet.</span><b>Lue Migri-ohje →</b></a><a href="/fi/guide/te"><strong>TE-palvelut ja työnhaku</strong><span>Hae työtä ja tukea Suomessa.</span><b>Lue työnhakuohje →</b></a></div></section>
 <section class="article-faq reveal" aria-labelledby="category-faq"><h2 id="category-faq">Usein kysytyt kysymykset</h2>{% for question, answer in category_seo.faq %}<div class="article-faq__item"><h3>{{ question }}</h3><p>{{ answer }}</p></div>{% endfor %}</section>
 <script type="application/ld+json">{{ faq_schema|safe }}</script>
